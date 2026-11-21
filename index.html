@@ -2,7 +2,13 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="description" content="Энциклопедия рок- и метал-групп: 250 000 групп и исполнителей, составы, инструменты, оборудование, фото.">
 <title>ROCK·METAL·BASE — энциклопедия гитарной музыки</title>
 <style>
 :root{
@@ -189,12 +195,47 @@ table.tb{width:100%;border-collapse:collapse;font-size:13px}
 .gcloud span small{color:var(--mut);margin-left:5px}
 .tip{position:fixed;pointer-events:none;background:#000e;border:1px solid var(--line);padding:5px 9px;border-radius:7px;font-size:12px;z-index:200;display:none}
 .mobf{display:none}
+.toast{position:fixed;left:12px;right:12px;bottom:14px;z-index:300;background:#000f;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;display:none;box-shadow:0 10px 30px #000}
+#list{min-width:0}
 @media(max-width:900px){
-  .wrap{grid-template-columns:1fr} aside{position:fixed;inset:60px 0 0 0;z-index:40;display:none;height:auto}
-  aside.show{display:block} .mobf{display:inline-block} .cols{grid-template-columns:1fr} .g2{grid-template-columns:1fr}
-  .hero .hc{flex-direction:column;align-items:flex-start} .hero h1{font-size:28px} .hstats{display:none}
-  nav button{padding:6px 9px}
+  header{flex-wrap:wrap;gap:6px 10px;padding:8px 12px}
+  .logo{font-size:15px;letter-spacing:1px;gap:7px} .logo svg{width:24px;height:24px}
+  nav{order:3;width:100%;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch} nav::-webkit-scrollbar{display:none}
+  nav button{padding:6px 12px;white-space:nowrap}
+  .mobf{display:inline-block;margin-left:auto;padding:7px 12px}
+  .hstats{display:none}
+  .wrap{grid-template-columns:1fr}
+  aside{position:fixed;inset:var(--hh,92px) 0 0 0;z-index:40;display:none;height:auto;padding:14px 14px 90px;border-right:0}
+  aside.show{display:block}
+  aside .showres{position:fixed;left:14px;right:14px;bottom:14px;z-index:41;padding:13px;font-size:15px;box-shadow:0 6px 24px #000c}
+  main{padding:12px 10px 60px}
+  .toolbar{gap:8px;margin-bottom:12px} .toolbar h2{font-size:18px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .card:hover{transform:none}
+  .cb{padding:8px 10px 10px} .cb h3{font-size:14px}
+  .ph .ini{font-size:32px}
+  #list{overflow-x:auto}
+  .tb{font-size:12px} .tb th{top:var(--hh,92px)} .tb td:nth-child(6),.tb th:nth-child(6),.tb td:nth-child(8),.tb th:nth-child(8){display:none}
+  .ov{padding:0} .modal{border-radius:0;min-height:100%;border:0}
+  .close{right:10px;top:10px} .back{left:10px;top:10px}
+  .hero{min-height:180px} .hero .hc{flex-direction:column;align-items:flex-start;padding:58px 16px 14px;gap:12px}
+  .hero .pic{width:150px;height:110px} .hero .pic.round{width:110px;height:110px}
+  .hero h1{font-size:26px} .hero .sub{font-size:13px}
+  .mb{padding:4px 12px 28px}
+  .tabs button{padding:10px 10px}
+  .cols{grid-template-columns:1fr;gap:16px} .g2{grid-template-columns:1fr}
+  .members{grid-template-columns:1fr}
+  .facts dl{grid-template-columns:96px 1fr}
+  .tl .ax{margin-left:96px} .tl .r .n{width:96px;font-size:11px}
+  .ggrid{grid-template-columns:1fr}
+  .gsum tr,.gsum td{display:block} .gsum td:first-child{width:auto;padding-bottom:2px;border-bottom:0}
+  .gear .box{padding:12px}
+  .bars .b .l{width:120px} .bars .b .v{width:48px}
+  .hist{height:170px} .panel{padding:14px}
+  .decgrid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .dec b{font-size:20px}
 }
+@media(min-width:901px){ aside .showres{display:none} }
 </style>
 </head>
 <body>
@@ -258,7 +299,8 @@ table.tb{width:100%;border-collapse:collapse;font-size:13px}
     </select>
   </div>
   <button class="btn ghost" style="width:100%" id="reset">Сбросить фильтры</button>
-  <p class="src" style="margin-top:18px">Данные: <a href="https://www.wikidata.org" target="_blank">Wikidata</a> (CC0), описания, фото и оборудование — <a href="https://www.wikipedia.org" target="_blank">Wikipedia</a> и <a href="https://commons.wikimedia.org" target="_blank">Wikimedia Commons</a>.</p>
+  <button class="btn showres" id="showres">Показать результаты</button>
+  <p class="src" style="margin-top:18px">Данные: <a href="https://www.wikidata.org" target="_blank">Wikidata</a> (CC0), <a href="https://www.metal-archives.com" target="_blank">Encyclopaedia Metallum</a>, описания, фото и оборудование — <a href="https://www.wikipedia.org" target="_blank">Wikipedia</a> и <a href="https://commons.wikimedia.org" target="_blank">Wikimedia Commons</a>.</p>
 </aside>
 
 <main>
@@ -280,12 +322,14 @@ table.tb{width:100%;border-collapse:collapse;font-size:13px}
 
 <div class="ov" id="ov"><div class="modal" id="modal"></div></div>
 <div class="tip" id="tip"></div>
+<div class="toast" id="toast"></div>
 
-<script src="/gear.js"></script>
+<script src="gear.js"></script>
+<script src="static-api.js"></script>
 <script>
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => (s ?? '').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const api = (u) => fetch(u).then(r => r.json());
+const api = (u) => SAPI(u);
 const NOW = 2026;
 const DEF = {q:'',person:'',genre:'',genreName:'',sub:true,country:'',instrument:'',from:'',to:'',status:'',photo:false,lineup:false,sort:'popular',kind:'',ma:'1'};
 const ST = {...DEF};
@@ -303,7 +347,7 @@ function phHTML(b, cls='ph'){
   const bg = `background:linear-gradient(135deg,hsl(${hue(b.name)},45%,18%),hsl(${(hue(b.name)+60)%360},40%,8%))`;
   let img = '';
   if (b.thumb) img = `<img loading="lazy" src="${esc(b.thumb)}" alt="" onerror="this.remove()">`;
-  else if (b.logo_thumb) img = `<img class="logoimg" loading="lazy" src="${esc(b.logo_thumb)}" alt="" onerror="this.remove()">`;
+  else if (b.logo_thumb) img = `<img class="logoimg" loading="lazy" src="${esc(b.logo_thumb)}" alt="" onerror="maNext(this)||this.remove()">`;
   return `<div class="${cls}" style="${bg}"><div class="ini">${esc(initials(b.name))}</div>${img}
     ${b.formed?`<span class="yr">${years(b)}</span>`:''}<span class="st ${isSplit(b)?'off':''}" title="${isSplit(b)?'Распалась':'Активна'}"></span>${b.kind==='solo'?'<span class="kb">соло</span>':''}${b.source==='metal-archives'?'<span class="kb ma">MA</span>':''}</div>`;
 }
@@ -315,12 +359,23 @@ const W = {
   lsGet(k){ try{ const v = localStorage.getItem('rmb:'+k); if(!v) return undefined; const o = JSON.parse(v); if (Date.now()-o.t > 14*864e5) return undefined; return o.v }catch(e){ return undefined } },
   lsSet(k,v){ try{ localStorage.setItem('rmb:'+k, JSON.stringify({t:Date.now(), v})) }catch(e){ try{ Object.keys(localStorage).filter(x=>x.startsWith('rmb:pi:')).slice(0,500).forEach(x=>localStorage.removeItem(x)) }catch(_){} } },
   parse(url){ const m = /^https?:\/\/(\w+)\.wikipedia\.org\/wiki\/(.+)$/.exec(url||''); return m ? [m[1], decodeURIComponent(m[2]).replace(/_/g,' ')] : [null,null] },
-  async get(lang, params, tries=3){
+  // не более 2 одновременных запросов к Википедии; при 429 — нарастающая пауза (1.5, 3, 6, 12 с)
+  active: 0, waiting: [],
+  async slot(){ if (this.active < 2){ this.active++; return } await new Promise(r=>this.waiting.push(r)); this.active++ },
+  free(){ this.active--; const n = this.waiting.shift(); if (n) n() },
+  async get(lang, params, tries=5){
     const u = `https://${lang}.wikipedia.org/w/api.php?` + new URLSearchParams({...params, format:'json', origin:'*'});
+    let last = null;
     for (let i=0;i<tries;i++){
-      try { const r = await fetch(u); if (r.status===429){ await new Promise(z=>setTimeout(z, 1500*(i+1))); continue } if(!r.ok) throw r.status; return await r.json() }
-      catch(e){ if (i===tries-1) throw e; await new Promise(z=>setTimeout(z, 800)) }
+      await this.slot();
+      let r = null;
+      try { r = await fetch(u) } catch(e){ last = e } finally { this.free() }
+      if (r && r.ok){ const j = await r.json().catch(()=>null); if (j) return j; last = 'bad json' }
+      else if (r) last = 'HTTP ' + r.status;
+      if (r && r.status === 404) break;
+      await new Promise(z=>setTimeout(z, 1500 * 2**i));
     }
+    throw new Error('Wikipedia: ' + last);
   },
   async intro(url){
     const [lang, title] = this.parse(url); if (!title) return null;
@@ -500,7 +555,7 @@ async function loadMore(first){
   const r = await api('/api/bands?'+qs());
   if (my !== reqId){ loading=false; return }
   total = r.total;
-  $('#cnt').textContent = total.toLocaleString('ru') + ' ' + plural(total,['группа','группы','групп']);
+  $('#cnt').textContent = total.toLocaleString('ru') + ' ' + plural(total,['группа','группы','групп']) + (r.partial ? ' · догружаю базу Metal Archives…' : '');
   if (mode==='grid'){
     let g = $('#list .grid'); if(!g){ $('#list').innerHTML='<div class="grid"></div>'; g=$('#list .grid') }
     g.insertAdjacentHTML('beforeend', r.items.map(b=>`<div class="card" data-id="${b.id}">${phHTML(b)}
@@ -538,8 +593,7 @@ function life(p){ return p.born ? (p.died ? `${p.born}–${p.died}` : `р. ${p.b
 function avatar(p){ return `<div class="av" style="background:hsl(${hue(p.name)},30%,22%)">${p.thumb?`<img loading="lazy" src="${esc(p.thumb)}" onerror="this.remove()">`:''}${p.thumb?'':esc(initials(p.name))}</div>` }
 function maImg(u){ return u ? u : '' }
 function imgFallback(el){ // если прямой хотлинк MA не сработал — через сервер
-  if (el.dataset.fb || !/metal-archives\.com\/images/.test(el.src)) { el.remove(); return }
-  el.dataset.fb = 1; el.src = '/api/img?u=' + encodeURIComponent(el.src.split('?')[0]);
+  if (!maNext(el)) el.remove();
 }
 
 /* ---- Википедия: вся статья (для оборудования) ---- */
@@ -560,7 +614,7 @@ W.findPerson = async function(name, band){
     const nn = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s*\(.*\)$/,'').replace(/[^a-z0-9 ]/g,'').trim();
     const hit = (r.query.search||[]).find(x => nn(x.title) === nn(name));
     if (hit) res = 'https://en.wikipedia.org/wiki/' + encodeURIComponent(hit.title.replace(/ /g,'_'));
-  } catch(e){}
+  } catch(e){ return undefined }   // сетевую ошибку / 429 не кэшируем
   this.mem[k] = res; this.lsSet(k, res); return res;
 };
 const GEAR_SEC = { en:/\b(equipment|gear|guitars?|basses|instruments?|rig|setup|drum ?kit|drums|endorsements?|amplifiers?|amps|effects|pedals|signature)\b/i,
@@ -583,12 +637,25 @@ function gearSections(art){
 }
 function gearSectionText(art){ return gearSections(art).map(s=>s.items.map(i=>i.s).join('\n')).join('\n') }
 const gearCache = {};
+function preGear(o){ // предрасчитанное оборудование (build_static) -> формат gearFor
+  const by = {};
+  for (const [c, arr] of Object.entries(o.by||{})) by[c] = arr.map(([name, n, ctx])=>({cat:c, name, n, ctx}));
+  return {by, sections: o.s||[], url: o.u||null, lang: o.l||'en', pre: true};
+}
 async function gearFor(p, bandName){ // p: {id, name, wiki_en, wiki_ru} или MA-участник
   const key = p.id || ('ma'+p.ma_artist);
   if (gearCache[key]) return gearCache[key];
-  gearCache[key] = (async ()=>{
+  const pr = gearCache[key] = gearLive(p, bandName);
+  pr.then(g=>{ if (g && g.error) delete gearCache[key] }, ()=>{ delete gearCache[key] });  // неудачу не запоминаем
+  return pr;
+}
+async function gearLive(p, bandName){
+  if (p.id && /^Q\d+$/.test(p.id)){
+    try { const o = await api('/api/gear/'+p.id); if (o && (o.u || o.by || o.s)) return preGear(o) } catch(e){}
+  }
+  return (async ()=>{
     let url = p.wiki_en || p.wiki_ru;
-    if (!url && bandName) url = await W.findPerson(p.name, bandName);
+    if (!url && bandName){ url = await W.findPerson(p.name, bandName); if (url === undefined) return {by:{}, sections:[], url:null, error:true} }
     if (!url) return {by:{}, sections:[], url:null};
     let art = null;
     try { art = await W.article(p.wiki_en || url) } catch(e){ return {by:{}, sections:[], url, error:true} }
@@ -601,7 +668,6 @@ async function gearFor(p, bandName){ // p: {id, name, wiki_en, wiki_ru} или M
     }
     return {by, sections, url: art.url, lang: art.lang};
   })();
-  return gearCache[key];
 }
 function gearCount(by){ return Object.values(by||{}).reduce((a,x)=>a+x.length,0) }
 function gearGrid(by){
@@ -621,11 +687,12 @@ function sectionsHTML(secs){
 }
 function gearBlock(g, instruments){
   const n = gearCount(g.by);
+  if (g.error) return `<p style="color:var(--acc2);margin:4px 0">Не удалось загрузить статью из Википедии (сайт временно ограничил число запросов). <a href="#" class="gretry">Повторить</a></p>`;
   let h = '';
   if (n) h += gearGrid(g.by);
   else h += `<p style="color:var(--mut);margin:4px 0">Конкретные модели в статье не найдены.${instruments&&instruments.length?' Инструменты: '+instruments.map(esc).join(', ')+'.':''}</p>`;
   if (g.sections && g.sections.length) h += `<details class="raw"><summary>Текст разделов об оборудовании из Википедии (${g.sections.map(s=>esc(s.name)).join(', ')})</summary><div style="margin-top:8px">${sectionsHTML(g.sections)}</div></details>`;
-  if (g.url) h += `<div class="src" style="margin-top:6px">Источник: <a target="_blank" href="${esc(g.url)}">Wikipedia (${esc(g.lang||'en')})</a>. Наведите на модель — увидите фразу из статьи.</div>`;
+  if (g.url) h += `<div class="src" style="margin-top:6px">Источник: <a target="_blank" href="${esc(g.url)}">Wikipedia (${esc(g.lang||'en')})</a>. Наведите на модель (на телефоне — нажмите), чтобы увидеть фразу из статьи.</div>`;
   return h;
 }
 
@@ -754,7 +821,7 @@ async function openBand(id){
     el.innerHTML = b.ma.bio.replace(/\r/g,'').split(/\n+/).filter(x=>x.trim() && !/^Contact:/i.test(x)).map(p=>`<p>${esc(p)}</p>`).join('') + `<div class="src">Источник: <a href="${esc(b.ma.url)}" target="_blank">Encyclopaedia Metallum</a> (англ.)</div>`;
   } else el.innerHTML = `<p style="color:var(--mut)">${esc(b.desc_ru||b.desc_en||'Подробного описания пока нет.')}</p>`;
   if (b.ma) renderMA(b);
-  else if (b.ma_id) { const ml=$('#malineup'); if (ml) ml.innerHTML = '<p class="src">Не удалось загрузить данные Metal Archives (сайт временно недоступен).</p>' }
+  else if (b.ma_id) { const ml=$('#malineup'); if (ml) ml.innerHTML = `<div class="empty" style="text-align:left;padding:14px 0">Подробный состав этой группы смотрите на <a target="_blank" href="https://www.metal-archives.com/bands/_/${b.ma_id}">Metal Archives ↗</a>.</div>`; if (!b.members.length && $('#tlineup')) $('#tlineup').textContent = 'Состав' }
 }
 function renderMA(b){
   const ma = b.ma, st = ma.stats||{};
@@ -805,7 +872,7 @@ async function loadBandGear(b){
   const queue = ms.map((m,i)=>[m,i]);
   const drawList = ()=>{
     const gl = $('#glist'); if(!gl) return;
-    gl.innerHTML = ms.map((m,i)=>{ const g = res[i]; if (!g || (!gearCount(g.by) && !g.sections.length)) return '';
+    gl.innerHTML = ms.map((m,i)=>{ const g = res[i]; if (!g || (!g.error && !gearCount(g.by) && !g.sections.length)) return '';
       return `<div class="who">${m.thumb?`<img src="${esc(m.thumb)}">`:''}<div><h4>${m._kind==='wd'?`<a href="#" data-pid="${m.id}">${esc(m.name)}</a>`:`<a href="#" data-mai2="${i}">${esc(m.name)}</a>`}</h4>
         <small style="color:var(--mut)">${(m.instruments||[]).map(esc).join(', ')}${m.years||memYears(m)?' · '+esc(m.years||memYears(m)):''}</small></div></div>
         <div class="box">${gearBlock(g, m.instruments)}</div>` }).join('');
@@ -825,7 +892,11 @@ async function loadBandGear(b){
   }};
   await Promise.all([worker(),worker(),worker()]);
   const found = Object.values(res).filter(g=>gearCount(g.by)).length;
-  const p = $('#gprog'); if (p) p.innerHTML = `Оборудование извлечено из статей Википедии: модели найдены у <b>${found}</b> из ${ms.length} участников. Категории: гитары, басы, усилители, кабинеты, педали и эффекты, звукосниматели, ударные, тарелки, клавишные, струны/палочки.`;
+  const failed = Object.values(res).filter(g=>g.error).length + (ms.length - Object.keys(res).length);
+  const p = $('#gprog'); if (p) p.innerHTML = `Оборудование извлечено из статей Википедии: модели найдены у <b>${found}</b> из ${ms.length} участников. Категории: гитары, басы, усилители, кабинеты, педали и эффекты, звукосниматели, ударные, тарелки, клавишные, струны/палочки.`
+    + (failed ? `<br><span style="color:var(--acc2)">Для ${failed} участн. статьи не загрузились (Википедия ограничила запросы).</span> <button class="btn ghost" id="gretryall" style="padding:4px 10px;margin-top:6px">Повторить</button>` : '');
+  const rb = $('#gretryall'); if (rb) rb.onclick = ()=>{ el.dataset.loaded = ''; loadBandGear(b) };
+  $$('#glist .gretry').forEach(a=>a.onclick = e=>{ e.preventDefault(); el.dataset.loaded = ''; loadBandGear(b) });
   if (!found && !$('#glist').innerHTML.trim()) $('#glist').innerHTML = '<div class="empty">В Википедии нет сведений об оборудовании участников этой группы.</div>';
 }
 function loadPhotos(b){
@@ -837,7 +908,7 @@ function loadPhotos(b){
   if (b.logo) ph.push([b.logo.replace('http://','https://')+'?width=600', 'Логотип']);
   if (b.ma && b.ma.logo) ph.push([b.ma.logo, 'Логотип (Metal Archives)']);
   b.members.forEach(m=>{ if(m.image) ph.push([m.image.replace('http://','https://')+'?width=600', m.name]); else if (m.thumb) ph.push([m.thumb, m.name]) });
-  el.innerHTML = ph.length ? `<div style="columns:3 260px;gap:12px">${ph.map(([u,c])=>`<figure style="margin:0 0 12px;break-inside:avoid;background:var(--bg3);border-radius:10px;overflow:hidden;border:1px solid var(--line)"><a href="${esc(u.replace(/\?width=\d+/,''))}" target="_blank"><img loading="lazy" src="${esc(u)}" style="width:100%;display:block;background:#f4f2ee" onerror="if(/metal-archives/.test(this.src)&&!this.dataset.fb){this.dataset.fb=1;this.src='/api/img?u='+encodeURIComponent(this.src.split('?')[0])}else this.closest('figure').remove()"></a><figcaption style="padding:6px 10px;font-size:12px;color:var(--mut)">${esc(c)}</figcaption></figure>`).join('')}</div><p class="src">Фото: Wikimedia Commons / Wikipedia / Encyclopaedia Metallum. Нажмите на снимок, чтобы открыть оригинал.</p>`
+  el.innerHTML = ph.length ? `<div style="columns:3 260px;gap:12px">${ph.map(([u,c])=>`<figure style="margin:0 0 12px;break-inside:avoid;background:var(--bg3);border-radius:10px;overflow:hidden;border:1px solid var(--line)"><a href="${esc(u.replace(/\?width=\d+/,''))}" target="_blank"><img loading="lazy" src="${esc(u)}" style="width:100%;display:block;background:#f4f2ee" onerror="if(!maNext(this))this.closest('figure').remove()"></a><figcaption style="padding:6px 10px;font-size:12px;color:var(--mut)">${esc(c)}</figcaption></figure>`).join('')}</div><p class="src">Фото: Wikimedia Commons / Wikipedia / Encyclopaedia Metallum. Нажмите на снимок, чтобы открыть оригинал.</p>`
     : '<div class="empty">Фотографий нет</div>';
 }
 
@@ -874,7 +945,8 @@ async function openPerson(id){
     .then(w=>{ const el=$('#pdesc'); if(!el) return;
       if (!p.thumb && w && w.image){ const ph = $('#modal .pic.round'); if (ph) ph.outerHTML = `<img class="pic round" src="${esc(w.image)}">` }
       el.innerHTML = w&&w.extract ? w.extract.split('\n').filter(Boolean).map(x=>`<p>${esc(x)}</p>`).join('')+`<div class="src">Источник: <a target="_blank" href="${esc(w.url)}">Википедия (${w.lang})</a></div>` : '' });
-    gearFor(p).then(g=>{ const el=$('#pgear'); if(el) el.innerHTML = `<div class="box">${gearBlock(g, p.instruments)}</div>` });
+    gearFor(p).then(function draw(g){ const el=$('#pgear'); if(!el) return; el.innerHTML = `<div class="box">${gearBlock(g, p.instruments)}</div>`;
+      const a = el.querySelector('.gretry'); if (a) a.onclick = e=>{ e.preventDefault(); el.innerHTML = '<div class="spin"></div>'; gearFor(p).then(draw) } });
   } else { $('#pdesc').innerHTML=''; $('#pgear').innerHTML = `<div class="empty" style="padding:10px;text-align:left">Нет статьи в Википедии. ${p.instruments.length?'Инструменты: '+p.instruments.map(esc).join(', ')+'.':''}</div>` }
 }
 
@@ -899,10 +971,12 @@ async function openMAMember(m, bandName){
     </dl></div></div></div>`);
   bindModalLinks();
   const url = await W.findPerson(m.name, bandName);
+  if (url === undefined){ $('#pdesc').innerHTML = ''; $('#pgear').innerHTML = `<p style="color:var(--acc2)">Википедия временно ограничила запросы. <a href="#" id="maretry">Повторить</a></p>`; $('#maretry').onclick = e=>{ e.preventDefault(); HIST.pop(); openMAMember(m, bandName) }; return }
   if (!url){ $('#pdesc').innerHTML = '<p style="color:var(--mut)">Статьи в Википедии об этом музыканте не найдено.</p>'; $('#pgear').innerHTML = '<div class="empty" style="padding:10px;text-align:left">Нет данных об оборудовании.</div>'; return }
   try { const w = await W.intro(url); if (w){ $('#pdesc').innerHTML = w.extract.split('\n').filter(Boolean).map(x=>`<p>${esc(x)}</p>`).join('')+`<div class="src">Источник: <a target="_blank" href="${esc(url)}">Wikipedia (en)</a></div>`;
     if (w.image) $('#mpic').outerHTML = `<img class="pic round" src="${esc(w.image)}">` } } catch(e){}
   const g = await gearFor({...m, wiki_en:url}); const el=$('#pgear'); if (el) el.innerHTML = `<div class="box">${gearBlock(g, m.roles_ru)}</div>`;
+  const ra = el && el.querySelector('.gretry'); if (ra) ra.onclick = e=>{ e.preventDefault(); HIST.pop(); openMAMember(m, bandName) };
 }
 
 /* ---------- views ---------- */
@@ -979,6 +1053,18 @@ async function drawStats(){
 }
 
 window.addEventListener('hashchange', ()=>{ fromHash(); syncUI(); reload() });
+/* ---------- телефон: высота шапки, панель фильтров, подсказки по касанию ---------- */
+function setHH(){ document.documentElement.style.setProperty('--hh', document.querySelector('header').offsetHeight + 'px') }
+window.addEventListener('resize', setHH); setHH();
+$('#showres').onclick = ()=>{ $('#side').classList.remove('show'); window.scrollTo(0,0) };
+let toastT;
+function toast(t){ const el=$('#toast'); el.textContent=t; el.style.display='block'; clearTimeout(toastT); toastT=setTimeout(()=>el.style.display='none', 5000) }
+$('#toast').onclick = ()=>{ $('#toast').style.display='none' };
+document.addEventListener('click', e=>{
+  const it = e.target.closest('.gcat .it, .gsum .it, .tl .bar, .tl .n');
+  if (it && it.title && matchMedia('(hover:none)').matches) toast(it.title);
+});
+window.addEventListener('sapi-all', ()=>{ if (!$('#v-catalog').hidden && page <= 2) reload() });
 /* ---------- init ---------- */
 (async function(){
   fromHash(); syncUI(); reload();

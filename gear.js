@@ -122,9 +122,10 @@
   const LOWER_MODEL = /^(wah|fuzz|plus|special|custom|junior|deluxe|standard|studio|classic|reissue|wah-wah|vibe|echo|bass)$/i;
   const GEAR_CTX = /\b(guitar|bass|amp|amplifier|pedal|effect|drum|cymbal|kit|keyboard|organ|synth|piano|strings|pickup|endors|signature|plays?|played|playing|uses?|used|using|rig|gear|equipment|tone|sound|model|custom|stage|tour|record)/i;
 
-  const NEG = /^(Premier Guitar|Guitar World|Guitar Player|Total Guitar|Les Paul Award|Les Paul Foundation|National Recording|National Academy|National Film|Martin Luther|Marshall Mathers|Marshall Tucker|Taylor Swift|Taylor Hawkins|Dean Martin|Jackson Browne|Jackson 5|Michael Jackson|Janet Jackson|Orange County|Orange Juice|Pearl Jam|Pearl Harbor|Hammond B-3 Organ Trio|Ludwig van|Rhodes Scholar|Boss Hog|Zoom call|Mesa, Arizona|Evans Blue|Nord Stage 2? festival)/i;
+  const NEG = /^(National (?!(?:Reso|Resophonic|Style|Tricone|Duolian|Triolian|Delphi|Estralita|Resonator|steel|guitars?|Reso-Phonic)\b)[A-Z]\w*|Premier Guitar|Guitar World|Guitar Player|Total Guitar|Les Paul Award|Les Paul Foundation|National Recording|National Academy|National Film|Martin Luther|Marshall Mathers|Marshall Tucker|Taylor Swift|Taylor Hawkins|Dean Martin|Jackson Browne|Jackson 5|Michael Jackson|Janet Jackson|Orange County|Orange Juice|Pearl Jam|Pearl Harbor|Hammond B-3 Organ Trio|Ludwig van|Rhodes Scholar|Boss Hog|Zoom call|Mesa, Arizona|Evans Blue|Nord Stage 2? festival)/i;
   const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const BRAND_RE = new RegExp('(?<![\\w\'’-])(' + BRANDS.map(b => b[0]).sort((a, b) => b.length - a.length).join('|') + ')(?![\\w\'’-])', 'g');
+  // без lookbehind (?<!…) — его не поддерживает Safari < 16.4; граница слева захватывается группой 1
+  const BRAND_RE = new RegExp('(^|[^\\w\'’-])(' + BRANDS.map(b => b[0]).sort((a, b) => b.length - a.length).join('|') + ')(?![\\w\'’-])', 'g');
   const brandInfo = name => {
     let best = null;
     for (const b of BRANDS) { const re = new RegExp('^(?:' + b[0] + ')$', 'i'); if (re.test(name) && (!best || b[0].length > best[0].length)) best = b; }
@@ -132,7 +133,7 @@
   };
 
   function sentences(text) {
-    return text.replace(/\n+/g, ' \n ').split(/(?<=[.!?])\s+(?=[A-Z"“(])|\s\n\s/).map(s => s.trim()).filter(s => s.length > 3);
+    return text.replace(/\n+/g, ' \n ').replace(/([.!?])\s+(?=[A-Z"“(])/g, '$1\u0000').split(/\u0000|\s\n\s/).map(s => s.trim()).filter(s => s.length > 3);
   }
 
   function categorize(item, brandCat, after, sentence) {
@@ -155,12 +156,12 @@
       BRAND_RE.lastIndex = 0;
       let m;
       while ((m = BRAND_RE.exec(s))) {
-        const brand = m[1];
-        if (NEG.test(s.slice(m.index, m.index + 40))) continue;
+        const pos = m.index + m[1].length, brand = m[2];
+        if (NEG.test(s.slice(pos, pos + 40))) continue;
         const info = brandInfo(brand); if (!info) continue;
         const [, bcat, strict] = info;
         // модель: следующие токены
-        const rest = s.slice(m.index + brand.length).split(/\s+/).filter(Boolean);
+        const rest = s.slice(pos + brand.length).split(/\s+/).filter(Boolean);
         const model = []; let after = '';
         for (let i = 0; i < rest.length && model.length < 4; i++) {
           let t = rest[i];
