@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ROCK·METAL·BASE — энциклопедия гитарной музыки</title>
+<style>
+:root{
+  --bg:#0b0b0d; --bg2:#141418; --bg3:#1c1c22; --line:#2a2a33; --tx:#e9e6e1; --mut:#8d8a95;
+  --acc:#ff3b2f; --acc2:#ffb400; --ok:#3ecf8e; --r:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 "Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--acc2);text-decoration:none} a:hover{text-decoration:underline}
+button,input,select{font:inherit;color:inherit}
+::-webkit-scrollbar{width:10px;height:10px} ::-webkit-scrollbar-thumb{background:#33333d;border-radius:10px} ::-webkit-scrollbar-track{background:transparent}
+
+/* header */
+header{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:20px;padding:12px 22px;
+  background:linear-gradient(180deg,#0b0b0d 70%,rgba(11,11,13,.85));border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.logo{font-weight:900;letter-spacing:2px;font-size:20px;white-space:nowrap;display:flex;align-items:center;gap:10px}
+.logo b{color:var(--acc)} .logo svg{width:30px;height:30px}
+nav{display:flex;gap:4px}
+nav button{background:none;border:1px solid transparent;padding:8px 14px;border-radius:999px;cursor:pointer;color:var(--mut);font-weight:600}
+nav button.on{color:var(--tx);border-color:var(--line);background:var(--bg3)}
+nav button:hover{color:var(--tx)}
+.hstats{margin-left:auto;color:var(--mut);font-size:12px;white-space:nowrap}
+.hstats b{color:var(--tx)}
+
+/* layout */
+.wrap{display:grid;grid-template-columns:290px 1fr;min-height:calc(100vh - 60px)}
+aside{border-right:1px solid var(--line);padding:18px;position:sticky;top:60px;height:calc(100vh - 60px);overflow:auto;background:var(--bg2)}
+main{padding:18px 22px 60px;min-width:0}
+.f{margin-bottom:14px}
+.f label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--mut);margin-bottom:5px;font-weight:700}
+.in{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 11px;outline:none}
+.in:focus{border-color:var(--acc)}
+.row{display:flex;gap:8px}
+.chk{display:flex;align-items:center;gap:8px;margin:6px 0;cursor:pointer;color:#cfccd6}
+.chk input{accent-color:var(--acc)}
+.seg{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{flex:1;background:none;border:0;padding:7px 4px;cursor:pointer;color:var(--mut);font-size:12px}
+.seg button.on{background:var(--acc);color:#fff}
+.decades{display:flex;flex-wrap:wrap;gap:5px}
+.decades button{background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:4px 7px;font-size:12px;cursor:pointer;color:#cfccd6}
+.decades button.on{border-color:var(--acc);color:#fff;background:#3a1210}
+.btn{background:var(--acc);border:0;color:#fff;padding:9px 14px;border-radius:9px;cursor:pointer;font-weight:700}
+.btn.ghost{background:var(--bg3);color:var(--tx);border:1px solid var(--line)}
+.combo{position:relative}
+.combo .list{position:absolute;left:0;right:0;top:100%;margin-top:4px;max-height:300px;overflow:auto;background:var(--bg3);border:1px solid var(--line);border-radius:9px;z-index:20;display:none;box-shadow:0 10px 30px #000a}
+.combo.open .list{display:block}
+.combo .opt{padding:7px 10px;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+.combo .opt:hover,.combo .opt.hl{background:#2a2a33}
+.combo .opt small{color:var(--mut)}
+.combo .clr{position:absolute;right:8px;top:8px;background:none;border:0;color:var(--mut);cursor:pointer;font-size:16px;display:none}
+.combo.has .clr{display:block}
+
+/* toolbar */
+.toolbar{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.toolbar h2{margin:0;font-size:22px}
+.toolbar .cnt{color:var(--mut)}
+.toolbar .sp{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;cursor:pointer;color:#d7d4dd}
+.chip:hover{border-color:var(--acc)}
+.chip.act{background:#3a1210;border-color:var(--acc)}
+.chip x{color:var(--mut)}
+.viewsw button{background:var(--bg3);border:1px solid var(--line);padding:7px 10px;cursor:pointer;color:var(--mut)}
+.viewsw button:first-child{border-radius:9px 0 0 9px} .viewsw button:last-child{border-radius:0 9px 9px 0}
+.viewsw button.on{color:#fff;border-color:var(--acc)}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.18s transform,.18s border-color;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-3px);border-color:#4a4a55}
+.ph{position:relative;aspect-ratio:4/3;background:#111;overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.9)}
+.ph img.logoimg{object-fit:contain;padding:18px;background:#f4f2ee}
+.ph .ini{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:900;letter-spacing:2px;color:#ffffff22;text-transform:uppercase}
+.ph .yr{position:absolute;left:8px;bottom:8px;background:#000c;border-radius:6px;padding:2px 7px;font-size:12px;font-weight:700}
+.ph .st{position:absolute;right:8px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px #0008}
+.ph .st.off{background:#777}
+.ph .kb{position:absolute;left:8px;top:8px;background:#000c;border:1px solid #fff3;border-radius:6px;padding:1px 6px;font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.ph .kb.ma{left:auto;right:24px;top:5px;background:#5a0e0a;border-color:#ff3b2f88}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin:8px 0 4px}
+.gcat{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.gcat h6{margin:0 0 7px;font-size:12px;letter-spacing:.5px;color:var(--acc2);text-transform:uppercase}
+.gcat .it{display:inline-flex;align-items:center;gap:5px;background:#24242c;border:1px solid #33333d;border-radius:7px;padding:3px 8px;margin:0 5px 5px 0;font-size:12.5px;cursor:help}
+.gcat .it small{color:var(--mut);font-size:10.5px}
+.gcat .it.top{border-color:#ff3b2f77;background:#2a1513}
+.gsum td{padding:7px 10px;border-bottom:1px solid #22222a;vertical-align:top}
+.gsum td:first-child{white-space:nowrap;color:var(--acc2);font-weight:700;font-size:12.5px;width:220px}
+.gsum .it{display:inline-block;background:#24242c;border:1px solid #33333d;border-radius:7px;padding:2px 8px;margin:0 5px 5px 0;font-size:12.5px;cursor:help}
+.gsum .it i{font-style:normal;color:var(--mut);font-size:11px}
+.raw{margin-top:10px}
+.raw summary{cursor:pointer;color:var(--mut);font-size:12.5px}
+.role{font-size:11.5px;color:#cfccd6}
+.cb{padding:10px 12px 12px;display:flex;flex-direction:column;gap:5px;flex:1}
+.cb h3{margin:0;font-size:15px;line-height:1.25}
+.cb .meta{color:var(--mut);font-size:12px}
+.cb .g{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:4px}
+.cb .g span{font-size:10.5px;background:#25252d;border-radius:5px;padding:1px 6px;color:#bdbac5}
+
+/* table view */
+table.tb{width:100%;border-collapse:collapse;font-size:13px}
+.tb th{text-align:left;color:var(--mut);font-weight:600;padding:8px;border-bottom:1px solid var(--line);position:sticky;top:60px;background:var(--bg);cursor:pointer;white-space:nowrap}
+.tb td{padding:6px 8px;border-bottom:1px solid #1d1d23;vertical-align:middle}
+.tb tr:hover td{background:#16161b;cursor:pointer}
+.tb img{width:46px;height:34px;object-fit:cover;border-radius:5px;background:#222;display:block}
+
+.more{display:flex;justify-content:center;padding:26px;color:var(--mut)}
+.spin{width:28px;height:28px;border:3px solid #333;border-top-color:var(--acc);border-radius:50%;animation:sp 0.8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* modal */
+.ov{position:fixed;inset:0;background:#000b;z-index:100;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:30px 14px}
+.ov.on{display:flex}
+.modal{width:min(1100px,100%);background:var(--bg2);border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;box-shadow:0 30px 80px #000}
+.close{position:absolute;right:14px;top:14px;z-index:5;background:#000a;border:1px solid #fff3;color:#fff;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:20px}
+.back{position:absolute;left:14px;top:14px;z-index:5;background:#000a;border:1px solid #fff3;color:#fff;height:38px;padding:0 14px;border-radius:19px;cursor:pointer;display:none}
+.hero{position:relative;min-height:260px;background:#111;display:flex;align-items:flex-end}
+.hero .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;filter:blur(0px)}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--bg2) 3%,transparent 70%)}
+.hero .hc{position:relative;z-index:2;padding:24px 28px;display:flex;gap:22px;align-items:flex-end;width:100%}
+.hero .pic{width:230px;height:170px;border-radius:12px;object-fit:cover;border:2px solid #fff2;background:#222;flex:none;box-shadow:0 10px 30px #000a}
+.hero .pic.round{width:170px;height:170px;border-radius:50%}
+.hero h1{margin:0;font-size:38px;line-height:1.05;font-weight:900;text-shadow:0 2px 20px #000}
+.hero .sub{color:#cfccd6;margin-top:6px;font-size:15px}
+.hero .lg{max-height:60px;max-width:200px;background:#f4f2ee;border-radius:8px;padding:6px;margin-top:10px}
+.mb{padding:6px 28px 28px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow:auto}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;cursor:pointer;color:var(--mut);font-weight:700;white-space:nowrap}
+.tabs button.on{color:var(--tx);border-bottom-color:var(--acc)}
+.cols{display:grid;grid-template-columns:1fr 300px;gap:26px}
+.desc p{margin:0 0 10px;color:#d9d6de}
+.src{font-size:12px;color:var(--mut)}
+.facts{background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px}
+.facts dl{margin:0;display:grid;grid-template-columns:100px 1fr;gap:7px 10px;font-size:13px}
+.facts dt{color:var(--mut)} .facts dd{margin:0}
+.members{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.mem{display:flex;gap:12px;background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;align-items:center}
+.mem:hover{border-color:#4a4a55}
+.mem .av{width:62px;height:62px;border-radius:50%;object-fit:cover;background:#2a2a33;flex:none;display:flex;align-items:center;justify-content:center;font-weight:900;color:#ffffff44;font-size:20px;overflow:hidden}
+.mem .av img{width:100%;height:100%;object-fit:cover}
+.mem b{display:block} .mem small{color:var(--mut);display:block}
+.mem .ins{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
+.mem .ins span{font-size:10.5px;background:#3a1210;color:#ffb3ad;border-radius:5px;padding:1px 6px}
+.sect{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--mut);margin:20px 0 10px;font-weight:800}
+.tl{position:relative;margin-top:8px}
+.tl .ax{display:flex;justify-content:space-between;color:var(--mut);font-size:11px;margin-left:170px;border-bottom:1px solid var(--line);padding-bottom:4px;margin-bottom:6px}
+.tl .r{display:flex;align-items:center;height:22px}
+.tl .r .n{width:170px;flex:none;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:8px;color:#cfccd6}
+.tl .r .tr{position:relative;flex:1;height:12px;background:#1a1a20;border-radius:6px}
+.tl .r .bar{position:absolute;top:0;height:12px;border-radius:6px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.gear .who{display:flex;align-items:center;gap:12px;margin:22px 0 8px}
+.gear .who img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+.gear .who h4{margin:0;font-size:16px}
+.gear .box{background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+.gear .box h5{margin:12px 0 6px;color:var(--acc2);font-size:13px}
+.gear .box h5:first-child{margin-top:0}
+.gear .box p{margin:0 0 8px;color:#d9d6de}
+.gear .box ul{margin:0 0 8px;padding-left:20px} .gear .box li{margin:2px 0;color:#d9d6de}
+.gear .clip{max-height:340px;overflow:hidden;position:relative}
+.gear .clip:after{content:"";position:absolute;left:0;right:0;bottom:0;height:60px;background:linear-gradient(0deg,var(--bg3),transparent)}
+.gear .exp{margin-top:6px;background:none;border:0;color:var(--acc2);cursor:pointer;padding:0}
+.empty{color:var(--mut);padding:30px;text-align:center}
+.inslist{display:flex;flex-wrap:wrap;gap:6px}
+
+/* charts */
+.panel{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
+.panel h3{margin:0 0 14px}
+.hist{display:flex;align-items:flex-end;gap:2px;height:260px;border-bottom:1px solid var(--line);padding-top:10px}
+.hist div{flex:1;background:linear-gradient(0deg,var(--acc),var(--acc2));border-radius:3px 3px 0 0;min-height:1px;cursor:pointer;position:relative;opacity:.85}
+.hist div:hover{opacity:1;outline:1px solid #fff}
+.hax{display:flex;justify-content:space-between;color:var(--mut);font-size:11px;margin-top:4px}
+.bars .b{display:flex;align-items:center;gap:10px;margin:5px 0;cursor:pointer}
+.bars .b .l{width:190px;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+.bars .b .t{flex:1;background:#1a1a20;border-radius:5px;height:16px;overflow:hidden}
+.bars .b .t i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.bars .b .v{width:60px;text-align:right;color:var(--mut);font-size:12px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.decgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.dec{background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer}
+.dec:hover{border-color:var(--acc)}
+.dec b{font-size:26px;display:block} .dec small{color:var(--mut)}
+.gcloud{display:flex;flex-wrap:wrap;gap:8px}
+.gcloud span{cursor:pointer;background:var(--bg3);border:1px solid var(--line);border-radius:999px;padding:4px 12px;white-space:nowrap}
+.gcloud span:hover{border-color:var(--acc);color:#fff}
+.gcloud span small{color:var(--mut);margin-left:5px}
+.tip{position:fixed;pointer-events:none;background:#000e;border:1px solid var(--line);padding:5px 9px;border-radius:7px;font-size:12px;z-index:200;display:none}
+.mobf{display:none}
+@media(max-width:900px){
+  .wrap{grid-template-columns:1fr} aside{position:fixed;inset:60px 0 0 0;z-index:40;display:none;height:auto}
+  aside.show{display:block} .mobf{display:inline-block} .cols{grid-template-columns:1fr} .g2{grid-template-columns:1fr}
+  .hero .hc{flex-direction:column;align-items:flex-start} .hero h1{font-size:28px} .hstats{display:none}
+  nav button{padding:6px 9px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 64 64"><path fill="#ff3b2f" d="M32 2 8 14v18c0 15 10 26 24 30 14-4 24-15 24-30V14z"/><path fill="#0b0b0d" d="M22 20h6v14l10-14h7L34 34l12 12h-8l-10-10v10h-6z"/></svg>
+    ROCK<b>·</b>METAL<b>·</b>BASE
+  </div>
+  <nav>
+    <button data-v="catalog" class="on">Каталог</button>
+    <button data-v="timeline">Хронология</button>
+    <button data-v="genres">Жанры</button>
+    <button data-v="stats">Статистика</button>
+  </nav>
+  <button class="btn ghost mobf" onclick="document.querySelector('aside').classList.toggle('show')">Фильтры</button>
+  <div class="hstats" id="hstats"></div>
+</header>
+
+<div class="wrap">
+<aside id="side">
+  <div class="f"><label>Поиск группы</label><input class="in" id="q" placeholder="Metallica, Кино, Link Wray…"></div>
+  <div class="f"><label>Музыкант в составе</label><input class="in" id="person" placeholder="напр. Dave Grohl"></div>
+  <div class="f"><label>Жанр / направление</label>
+    <div class="combo" id="cgenre"><input class="in" placeholder="Все жанры (855 направлений)"><button class="clr">×</button><div class="list"></div></div>
+    <label class="chk" style="text-transform:none;letter-spacing:0;font-weight:400;font-size:13px;margin-top:6px"><input type="checkbox" id="sub" checked> включая поджанры</label>
+  </div>
+  <div class="f"><label>Страна</label>
+    <div class="combo" id="ccountry"><input class="in" placeholder="Все страны"><button class="clr">×</button><div class="list"></div></div>
+  </div>
+  <div class="f"><label>Инструмент участника</label>
+    <div class="combo" id="cinstr"><input class="in" placeholder="Любой (гитара, терменвокс…)"><button class="clr">×</button><div class="list"></div></div>
+  </div>
+  <div class="f"><label>Год основания</label>
+    <div class="row"><input class="in" id="yfrom" type="number" placeholder="с" min="1900" max="2026"><input class="in" id="yto" type="number" placeholder="по" min="1900" max="2026"></div>
+    <div class="decades" id="decades" style="margin-top:8px"></div>
+  </div>
+  <div class="f"><label>Тип</label>
+    <div class="seg" id="kind"><button data-s="" class="on">Все</button><button data-s="band">Группы</button><button data-s="solo">Сольные</button></div>
+  </div>
+  <div class="f"><label>Источники</label>
+    <div class="seg" id="masrc"><button data-s="1" class="on">Все</button><button data-s="0">Wikidata</button><button data-s="only">Metal Archives</button></div>
+  </div>
+  <div class="f"><label>Статус</label>
+    <div class="seg" id="status"><button data-s="" class="on">Все</button><button data-s="active">Активные</button><button data-s="dissolved">Распались</button></div>
+  </div>
+  <div class="f">
+    <label class="chk" style="text-transform:none;letter-spacing:0;font-weight:400;font-size:13px"><input type="checkbox" id="photo"> только с фото / логотипом</label>
+    <label class="chk" style="text-transform:none;letter-spacing:0;font-weight:400;font-size:13px"><input type="checkbox" id="lineup"> только с известным составом</label>
+  </div>
+  <div class="f"><label>Сортировка</label>
+    <select class="in" id="sort">
+      <option value="popular">По известности</option>
+      <option value="name">По названию A→Я</option>
+      <option value="-name">По названию Я→A</option>
+      <option value="formed">По году основания ↑ (старые)</option>
+      <option value="-formed">По году основания ↓ (новые)</option>
+      <option value="dissolved">По году распада</option>
+      <option value="longevity">По длительности карьеры</option>
+      <option value="members">По числу участников</option>
+      <option value="country">По стране</option>
+    </select>
+  </div>
+  <button class="btn ghost" style="width:100%" id="reset">Сбросить фильтры</button>
+  <p class="src" style="margin-top:18px">Данные: <a href="https://www.wikidata.org" target="_blank">Wikidata</a> (CC0), описания, фото и оборудование — <a href="https://www.wikipedia.org" target="_blank">Wikipedia</a> и <a href="https://commons.wikimedia.org" target="_blank">Wikimedia Commons</a>.</p>
+</aside>
+
+<main>
+  <section id="v-catalog">
+    <div class="toolbar">
+      <h2>Группы</h2><span class="cnt" id="cnt"></span>
+      <div class="chips" id="active"></div>
+      <span class="sp"></span>
+      <div class="viewsw"><button data-m="grid" class="on" title="Плитка">▦ Плитка</button><button data-m="table" title="Таблица">☰ Таблица</button></div>
+    </div>
+    <div id="list"></div>
+    <div class="more" id="more"></div>
+  </section>
+  <section id="v-timeline" hidden></section>
+  <section id="v-genres" hidden></section>
+  <section id="v-stats" hidden></section>
+</main>
+</div>
+
+<div class="ov" id="ov"><div class="modal" id="modal"></div></div>
+<div class="tip" id="tip"></div>
+
+<script src="/gear.js"></script>
+<script>
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => (s ?? '').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const api = (u) => fetch(u).then(r => r.json());
+const NOW = 2026;
+const DEF = {q:'',person:'',genre:'',genreName:'',sub:true,country:'',instrument:'',from:'',to:'',status:'',photo:false,lineup:false,sort:'popular',kind:'',ma:'1'};
+const ST = {...DEF};
+let page = 1, total = 0, loading = false, done = false, mode = 'grid', FACETS = null, STATS = null, reqId = 0;
+
+function initials(n){ return (n||'?').replace(/^the\s+/i,'').split(/\s+/).slice(0,2).map(w=>w[0]).join('') }
+function isSplit(b){ return !!b.dissolved || ['Split-up','Changed name'].includes(b.status_text) }
+function years(b){
+  if (b.formed) return b.formed + '–' + (b.dissolved || (isSplit(b) ? '?' : 'н.в.'));
+  return b.dissolved ? '?–'+b.dissolved : '';
+}
+const STATUS_RU = {'Active':'активна','Split-up':'распалась','On hold':'пауза','Changed name':'сменила название','Unknown':'неизвестно','Disputed':'спорный статус'};
+function hue(s){ let h=0; for(const c of s||'') h=(h*31+c.charCodeAt(0))%360; return h }
+function phHTML(b, cls='ph'){
+  const bg = `background:linear-gradient(135deg,hsl(${hue(b.name)},45%,18%),hsl(${(hue(b.name)+60)%360},40%,8%))`;
+  let img = '';
+  if (b.thumb) img = `<img loading="lazy" src="${esc(b.thumb)}" alt="" onerror="this.remove()">`;
+  else if (b.logo_thumb) img = `<img class="logoimg" loading="lazy" src="${esc(b.logo_thumb)}" alt="" onerror="this.remove()">`;
+  return `<div class="${cls}" style="${bg}"><div class="ini">${esc(initials(b.name))}</div>${img}
+    ${b.formed?`<span class="yr">${years(b)}</span>`:''}<span class="st ${isSplit(b)?'off':''}" title="${isSplit(b)?'Распалась':'Активна'}"></span>${b.kind==='solo'?'<span class="kb">соло</span>':''}${b.source==='metal-archives'?'<span class="kb ma">MA</span>':''}</div>`;
+}
+
+
+/* ---------- Wikipedia (запросы идут напрямую из браузера, CORS origin=*) ---------- */
+const W = {
+  mem: {},
+  lsGet(k){ try{ const v = localStorage.getItem('rmb:'+k); if(!v) return undefined; const o = JSON.parse(v); if (Date.now()-o.t > 14*864e5) return undefined; return o.v }catch(e){ return undefined } },
+  lsSet(k,v){ try{ localStorage.setItem('rmb:'+k, JSON.stringify({t:Date.now(), v})) }catch(e){ try{ Object.keys(localStorage).filter(x=>x.startsWith('rmb:pi:')).slice(0,500).forEach(x=>localStorage.removeItem(x)) }catch(_){} } },
+  parse(url){ const m = /^https?:\/\/(\w+)\.wikipedia\.org\/wiki\/(.+)$/.exec(url||''); return m ? [m[1], decodeURIComponent(m[2]).replace(/_/g,' ')] : [null,null] },
+  async get(lang, params, tries=3){
+    const u = `https://${lang}.wikipedia.org/w/api.php?` + new URLSearchParams({...params, format:'json', origin:'*'});
+    for (let i=0;i<tries;i++){
+      try { const r = await fetch(u); if (r.status===429){ await new Promise(z=>setTimeout(z, 1500*(i+1))); continue } if(!r.ok) throw r.status; return await r.json() }
+      catch(e){ if (i===tries-1) throw e; await new Promise(z=>setTimeout(z, 800)) }
+    }
+  },
+  async intro(url){
+    const [lang, title] = this.parse(url); if (!title) return null;
+    const k = 'in:'+lang+':'+title; let c = this.mem[k] ?? this.lsGet(k); if (c) return c;
+    const r = await this.get(lang, {action:'query', prop:'extracts|pageimages', exintro:1, explaintext:1, piprop:'thumbnail|original', pithumbsize:900, titles:title, redirects:1});
+    const p = Object.values(r.query.pages)[0];
+    c = {lang, url, title:p.title, extract:p.extract||'', image:(p.thumbnail||{}).source, image_full:(p.original||{}).source};
+    this.mem[k]=c; this.lsSet(k,c); return c;
+  },
+  async images(pairs, size=500){ // pairs: [[key,url]] -> {key: thumb}
+    const out = {}, need = {};
+    for (const [key,url] of pairs){
+      const ck = 'pi:'+key; const c = this.mem[ck] ?? this.lsGet(ck);
+      if (c !== undefined){ if (c) out[key]=c; continue }
+      const [lang,title] = this.parse(url); if (title) (need[lang] ||= []).push([key,title]);
+    }
+    await Promise.all(Object.entries(need).map(async ([lang, lst])=>{
+      for (let i=0;i<lst.length;i+=50){
+        const chunk = lst.slice(i,i+50);
+        try {
+          const r = await this.get(lang, {action:'query', prop:'pageimages', piprop:'thumbnail', pithumbsize:size, titles:chunk.map(x=>x[1]).join('|'), redirects:1, formatversion:2});
+          const q = r.query||{}, norm = {};
+          [...(q.normalized||[]), ...(q.redirects||[])].forEach(n=>norm[n.from]=n.to);
+          const img = {}; (q.pages||[]).forEach(p=>img[p.title]=(p.thumbnail||{}).source||'');
+          for (const [key,t] of chunk){ let tt = norm[t]||t; tt = norm[tt]||tt; const u = img[tt]||''; this.mem['pi:'+key]=u; this.lsSet('pi:'+key,u); if(u) out[key]=u }
+        } catch(e){}
+      }
+    }));
+    return out;
+  },
+  GEAR: { en:/\b(equipment|gear|guitars?|basses|instruments?|rig|setup|drum ?kit|drums|endorsements?|amplifiers?|signature)\b/i,
+          ru:/(оборудован|аппаратур|инструмент|гитар|ударн|барабан|усилител|снаряжен|эндорс)/i },
+  GEX: /(discograph|дискограф|see also|см\. также|references|примечани|external|ссылки|filmograph|bibliograph|литература)/i,
+  async gear(url){
+    const [lang, title] = this.parse(url); if (!title) return null;
+    const k = 'gr:'+lang+':'+title; let c = this.mem[k] ?? this.lsGet(k); if (c) return c;
+    const r = await this.get(lang, {action:'parse', page:title, prop:'sections', redirects:1});
+    const secs = (r.parse||{}).sections||[], picked = [];
+    const re = this.GEAR[lang] || this.GEAR.en;
+    for (const s of secs){
+      const name = s.line.replace(/<[^>]+>/g,'').replace(/&amp;/g,'&');
+      if (re.test(name) && !this.GEX.test(name) && !picked.some(p=>s.number.startsWith(p.number+'.'))) picked.push({index:s.index, number:s.number, name});
+    }
+    const res = {lang, url, sections:[]};
+    for (const p of picked.slice(0,3)){
+      const rr = await this.get(lang, {action:'parse', page:title, prop:'text', section:p.index, redirects:1, disableeditsection:1, disabletoc:1});
+      const html = ((rr.parse||{}).text||{})['*']||'';
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      doc.querySelectorAll('style,script,sup,table,figure,.mw-editsection,.reference,.hatnote,.navbox,.thumb,.noprint,.toc,#toc,.mw-empty-elt,.gallery').forEach(e=>e.remove());
+      const items = [];
+      doc.querySelectorAll('p,li,h2,h3,h4,h5,dt,dd').forEach(e=>{
+        const cl = e.cloneNode(true); cl.querySelectorAll('ul,ol').forEach(x=>x.remove());
+        const t = cl.textContent.replace(/\s+/g,' ').trim(); if(!t) return;
+        const tag = e.tagName.toLowerCase();
+        const kind = /^h\d|dt$/.test(tag) ? 'h' : (tag==='li'||tag==='dd' ? 'li' : 'p');
+        if (kind==='h' && t===p.name) return;
+        items.push({t:kind, s:t});
+      });
+      if (items.length) res.sections.push({name:p.name, items:items.slice(0,150)});
+    }
+    this.mem[k]=res; this.lsSet(k,res); return res;
+  }
+};
+async function fillCardThumbs(items, root){
+  const miss = items.filter(b=>!b.thumb && (b.wiki_en||b.wiki_ru)).map(b=>[b.id, b.wiki_en||b.wiki_ru]);
+  if (!miss.length) return;
+  const m = await W.images(miss);
+  for (const [id,u] of Object.entries(m)){
+    root.querySelectorAll(`[data-id="${id}"]`).forEach(c=>{
+      const ph = c.querySelector('.ph'); if (ph){ ph.querySelector('img')?.remove(); ph.insertAdjacentHTML('beforeend', `<img loading="lazy" src="${esc(u)}" onerror="this.remove()">`) }
+      const ti = c.querySelector('td img'); if (ti){ ti.src = u; ti.style.visibility='' }
+    });
+  }
+}
+
+/* ---------- URL state ---------- */
+function toHash(){
+  const p = new URLSearchParams();
+  for (const [k,v] of Object.entries(ST)) if (v && k!=='genreName' && v!==DEF[k]) p.set(k, v===true?'1':v);
+  if (ST.sub===false) p.set('sub','0'); if (ST.ma!=='1') p.set('ma', ST.ma||'0');
+  history.replaceState(null,'','#'+p.toString());
+}
+function fromHash(){
+  const p = new URLSearchParams(location.hash.slice(1));
+  for (const k of Object.keys(ST)){
+    if (!p.has(k)) continue;
+    const v = p.get(k);
+    ST[k] = (k==='photo'||k==='lineup') ? v==='1' : (k==='sub' ? v!=='0' : v);
+  }
+}
+
+/* ---------- combos ---------- */
+function combo(id, getItems, onPick){
+  const el = $(id), inp = el.querySelector('input'), list = el.querySelector('.list'), clr = el.querySelector('.clr');
+  let hl = 0, cur = [];
+  const render = () => {
+    const t = inp.value.trim().toLowerCase();
+    cur = getItems().filter(x => !t || x.name.toLowerCase().includes(t)).slice(0, 150);
+    list.innerHTML = cur.map((x,i)=>`<div class="opt ${i===hl?'hl':''}" data-i="${i}"><span>${esc(x.name)}</span><small>${x.n.toLocaleString('ru')}</small></div>`).join('') || '<div class="opt"><small>ничего не найдено</small></div>';
+  };
+  inp.addEventListener('focus', ()=>{ inp.select(); hl=0; render(); el.classList.add('open') });
+  inp.addEventListener('input', ()=>{ hl=0; render() });
+  inp.addEventListener('blur', ()=> setTimeout(()=>el.classList.remove('open'),180));
+  inp.addEventListener('keydown', e=>{
+    if (e.key==='ArrowDown'){ hl=Math.min(hl+1,cur.length-1); render(); e.preventDefault() }
+    if (e.key==='ArrowUp'){ hl=Math.max(hl-1,0); render(); e.preventDefault() }
+    if (e.key==='Enter' && cur[hl]){ onPick(cur[hl]); inp.blur() }
+  });
+  list.addEventListener('mousedown', e=>{ const o=e.target.closest('.opt'); if(o&&o.dataset.i!=null){ onPick(cur[+o.dataset.i]); } });
+  clr.addEventListener('click', ()=> onPick(null));
+  return { set(label){ inp.value = label||''; el.classList.toggle('has', !!label) } };
+}
+let CG, CC, CI;
+
+/* ---------- filters ---------- */
+function syncUI(){
+  $('#q').value = ST.q; $('#person').value = ST.person; $('#sub').checked = ST.sub;
+  $('#yfrom').value = ST.from; $('#yto').value = ST.to; $('#photo').checked = ST.photo; $('#lineup').checked = ST.lineup;
+  $('#sort').value = ST.sort;
+  $$('#status button').forEach(b=>b.classList.toggle('on', b.dataset.s===ST.status));
+  $$('#kind button').forEach(b=>b.classList.toggle('on', b.dataset.s===ST.kind));
+  $$('#masrc button').forEach(b=>b.classList.toggle('on', b.dataset.s===ST.ma));
+  if (FACETS){
+    const g = FACETS.genres.find(x=>x.id===ST.genre); ST.genreName = g?g.name:'';
+    CG.set(ST.genreName); CC.set(ST.country); CI.set(ST.instrument);
+  }
+  $$('#decades button').forEach(b=>b.classList.toggle('on', ST.from==b.dataset.d && ST.to==(+b.dataset.d+9)));
+  renderActive();
+}
+function renderActive(){
+  const a = [];
+  if (ST.q) a.push(['q', '«'+ST.q+'»']);
+  if (ST.person) a.push(['person','музыкант: '+ST.person]);
+  if (ST.genre) a.push(['genre', ST.genreName || ST.genre]);
+  if (ST.country) a.push(['country', ST.country]);
+  if (ST.instrument) a.push(['instrument', '🎸 '+ST.instrument]);
+  if (ST.from||ST.to) a.push(['years', (ST.from||'…')+'–'+(ST.to||'…')]);
+  if (ST.status) a.push(['status', ST.status==='active'?'активные':'распавшиеся']);
+  if (ST.kind) a.push(['kind', ST.kind==='solo'?'сольные исполнители':'только группы']);
+  if (ST.ma!=='1') a.push(['ma', ST.ma==='only'?'только Metal Archives':'без Metal Archives']);
+  $('#active').innerHTML = a.map(([k,l])=>`<span class="chip act" data-k="${k}">${esc(l)} <x>×</x></span>`).join('');
+}
+$('#active').addEventListener('click', e=>{
+  const c = e.target.closest('.chip'); if(!c) return;
+  const k = c.dataset.k;
+  if (k==='years'){ ST.from=''; ST.to='' } else if (k==='ma') ST.ma='1'; else ST[k] = '';
+  apply();
+});
+let tmr;
+function apply(){ toHash(); syncUI(); clearTimeout(tmr); tmr = setTimeout(reload, 60) }
+['q','person'].forEach(id => $('#'+id).addEventListener('input', e=>{ ST[id]=e.target.value.trim(); clearTimeout(tmr); tmr=setTimeout(()=>{toHash();renderActive();reload()},350) }));
+['yfrom','yto'].forEach(id => $('#'+id).addEventListener('change', e=>{ ST[id==='yfrom'?'from':'to']=e.target.value; apply() }));
+$('#sub').onchange = e=>{ ST.sub=e.target.checked; apply() };
+$('#photo').onchange = e=>{ ST.photo=e.target.checked; apply() };
+$('#lineup').onchange = e=>{ ST.lineup=e.target.checked; apply() };
+$('#sort').onchange = e=>{ ST.sort=e.target.value; apply() };
+$('#status').onclick = e=>{ const b=e.target.closest('button'); if(b){ ST.status=b.dataset.s; apply() } };
+$('#kind').onclick = e=>{ const b=e.target.closest('button'); if(b){ ST.kind=b.dataset.s; apply() } };
+$('#masrc').onclick = e=>{ const b=e.target.closest('button'); if(b){ ST.ma=b.dataset.s; apply() } };
+$('#reset').onclick = ()=>{ Object.assign(ST, DEF); apply() };
+$('#decades').innerHTML = [1950,1960,1970,1980,1990,2000,2010,2020].map(d=>`<button data-d="${d}">${String(d).slice(2)}-е</button>`).join('');
+$('#decades').onclick = e=>{ const b=e.target.closest('button'); if(!b) return; const d=+b.dataset.d;
+  if (ST.from==d && ST.to==d+9){ ST.from=''; ST.to='' } else { ST.from=d; ST.to=d+9 } apply() };
+$$('.viewsw button').forEach(b=> b.onclick = ()=>{ mode=b.dataset.m; $$('.viewsw button').forEach(x=>x.classList.toggle('on',x===b)); reload() });
+
+function qs(){
+  const p = new URLSearchParams({page, size: 48, sort: ST.sort});
+  for (const k of ['q','person','genre','country','instrument','from','to','status','kind','ma']) if (ST[k]) p.set(k, ST[k]);
+  p.set('sub', ST.sub?'1':'0'); if (ST.photo) p.set('photo','1'); if (ST.lineup) p.set('lineup','1');
+  return p.toString();
+}
+function reload(){ page=1; done=false; $('#list').innerHTML=''; total=0; loadMore(true) }
+async function loadMore(first){
+  if (loading || done) return;
+  loading = true; const my = ++reqId;
+  $('#more').innerHTML = '<div class="spin"></div>';
+  const r = await api('/api/bands?'+qs());
+  if (my !== reqId){ loading=false; return }
+  total = r.total;
+  $('#cnt').textContent = total.toLocaleString('ru') + ' ' + plural(total,['группа','группы','групп']);
+  if (mode==='grid'){
+    let g = $('#list .grid'); if(!g){ $('#list').innerHTML='<div class="grid"></div>'; g=$('#list .grid') }
+    g.insertAdjacentHTML('beforeend', r.items.map(b=>`<div class="card" data-id="${b.id}">${phHTML(b)}
+      <div class="cb"><h3>${esc(b.name)}</h3>
+      <div class="meta">${[b.country, b.n_members? b.n_members+' уч.':''].filter(Boolean).map(esc).join(' · ')}</div>
+      <div class="g">${b.source==='metal-archives'&&b.ma_genre ? `<span>${esc(b.ma_genre)}</span>` : (b.genres||[]).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div></div>`).join(''));
+  } else {
+    let t = $('#list tbody');
+    if(!t){ $('#list').innerHTML=`<table class="tb"><thead><tr><th></th><th data-s="name">Название</th><th data-s="formed">Основана</th><th data-s="dissolved">Распад</th><th data-s="country">Страна</th><th>Город</th><th data-s="members">Состав</th><th>Жанры</th></tr></thead><tbody></tbody></table>`; t=$('#list tbody');
+      $$('#list th[data-s]').forEach(th=>th.onclick=()=>{ const s=th.dataset.s; ST.sort = ST.sort===s && s!=='members' && s!=='dissolved' ? '-'+s : s; if(!SORTS_OK.includes(ST.sort)) ST.sort=s; apply() }) }
+    t.insertAdjacentHTML('beforeend', r.items.map(b=>`<tr data-id="${b.id}"><td>${b.thumb||b.logo_thumb?`<img loading="lazy" src="${esc(b.thumb||b.logo_thumb)}" onerror="this.style.visibility='hidden'">`:'<img>'}</td>
+      <td><b>${esc(b.name)}</b>${b.name_ru&&b.name_ru!==b.name?`<br><small style="color:var(--mut)">${esc(b.name_ru)}</small>`:''}</td><td>${b.formed||'—'}</td><td>${b.dissolved||'—'}</td>
+      <td>${esc(b.country||'—')}</td><td>${esc(b.origin||'')}</td><td>${b.kind==='solo'?'соло':(b.n_members||'')}</td><td style="color:var(--mut);font-size:12px">${esc(b.source==='metal-archives'&&b.ma_genre?b.ma_genre:(b.genres||[]).join(', '))}</td></tr>`).join(''));
+  }
+  fillCardThumbs(r.items, $('#list'));
+  page++; loading=false;
+  if (r.items.length < r.size){ done=true; $('#more').innerHTML = total? '' : '<div class="empty">Ничего не найдено. Попробуйте ослабить фильтры.</div>' }
+  else $('#more').innerHTML = '';
+}
+const SORTS_OK = ['popular','name','-name','formed','-formed','dissolved','longevity','members','country'];
+function plural(n,f){ n=Math.abs(n)%100; const n1=n%10; if(n>10&&n<20) return f[2]; if(n1>1&&n1<5) return f[1]; if(n1==1) return f[0]; return f[2] }
+new IntersectionObserver(es=>{ if(es[0].isIntersecting && !$('#v-catalog').hidden) loadMore() },{rootMargin:'800px'}).observe($('#more'));
+$('#list').addEventListener('click', e=>{ const c=e.target.closest('[data-id]'); if(c) openBand(c.dataset.id) });
+
+/* ---------- modal ---------- */
+const HIST = [];
+function showModal(html){ $('#modal').innerHTML = `<button class="close" onclick="closeModal()">×</button><button class="back" onclick="goBack()">← Назад</button>` + html; $('#ov').classList.add('on'); $('#ov').scrollTop=0; document.body.style.overflow='hidden'; $('.back').style.display = HIST.length>1?'block':'none' }
+function closeModal(){ $('#ov').classList.remove('on'); document.body.style.overflow=''; HIST.length=0 }
+function goBack(){ HIST.pop(); const p = HIST.pop(); if(!p) return closeModal(); if (p[0]==='b') openBand(p[1]); else if (p[0]==='p') openPerson(p[1]); else openMAMember(p[1], p[2]) }
+$('#ov').addEventListener('click', e=>{ if(e.target.id==='ov') closeModal() });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal() });
+
+function memYears(m){ if (m.start||m.end) return (m.start||'?')+'–'+(m.end||'н.в.'); return '' }
+function life(p){ return p.born ? (p.died ? `${p.born}–${p.died}` : `р. ${p.born}`) : '' }
+function avatar(p){ return `<div class="av" style="background:hsl(${hue(p.name)},30%,22%)">${p.thumb?`<img loading="lazy" src="${esc(p.thumb)}" onerror="this.remove()">`:''}${p.thumb?'':esc(initials(p.name))}</div>` }
+function maImg(u){ return u ? u : '' }
+function imgFallback(el){ // если прямой хотлинк MA не сработал — через сервер
+  if (el.dataset.fb || !/metal-archives\.com\/images/.test(el.src)) { el.remove(); return }
+  el.dataset.fb = 1; el.src = '/api/img?u=' + encodeURIComponent(el.src.split('?')[0]);
+}
+
+/* ---- Википедия: вся статья (для оборудования) ---- */
+W.article = async function(url){
+  const [lang, title] = this.parse(url); if (!title) return null;
+  const k = 'ar:'+lang+':'+title; let c = this.mem[k] ?? this.lsGet(k); if (c) return c;
+  const r = await this.get(lang, {action:'query', prop:'extracts', explaintext:1, exsectionformat:'wiki', titles:title, redirects:1});
+  const p = Object.values(r.query.pages)[0];
+  c = {lang, url, title:p.title, text:(p.extract||'')};
+  this.mem[k] = c; try{ this.lsSet(k, c) }catch(e){}
+  return c;
+};
+W.findPerson = async function(name, band){
+  const k = 'fp:'+name+'|'+band; const c = this.mem[k] ?? this.lsGet(k); if (c !== undefined) return c;
+  let res = null;
+  try {
+    const r = await this.get('en', {action:'query', list:'search', srsearch:`"${name}" "${band}"`, srlimit:5, srprop:''});
+    const nn = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s*\(.*\)$/,'').replace(/[^a-z0-9 ]/g,'').trim();
+    const hit = (r.query.search||[]).find(x => nn(x.title) === nn(name));
+    if (hit) res = 'https://en.wikipedia.org/wiki/' + encodeURIComponent(hit.title.replace(/ /g,'_'));
+  } catch(e){}
+  this.mem[k] = res; this.lsSet(k, res); return res;
+};
+const GEAR_SEC = { en:/\b(equipment|gear|guitars?|basses|instruments?|rig|setup|drum ?kit|drums|endorsements?|amplifiers?|amps|effects|pedals|signature)\b/i,
+  ru:/(оборудован|аппаратур|инструмент|гитар|ударн|барабан|усилител|эффект|педал|снаряжен|эндорс)/i };
+const GEAR_EX = /(discograph|дискограф|see also|см\. также|references|примечани|external|ссылки|filmograph|bibliograph|литература|notes|further reading)/i;
+function gearSections(art){
+  const lines = art.text.split('\n'), out = []; let cur = null, curLvl = 0;
+  for (const ln of lines){
+    const h = /^(={2,6})\s*(.+?)\s*\1\s*$/.exec(ln);
+    if (h){
+      const lvl = h[1].length, name = h[2];
+      if (cur && lvl > curLvl){ cur.items.push({t:'h', s:name}); continue }
+      cur = null;
+      if ((GEAR_SEC[art.lang]||GEAR_SEC.en).test(name) && !GEAR_EX.test(name)){ cur = {name, items:[]}; curLvl = lvl; out.push(cur) }
+      continue;
+    }
+    if (cur && ln.trim()){ const t = ln.trim(); cur.items.push({t: (t.length < 200 && !/[.!?:]$/.test(t)) ? 'li' : 'p', s:t}) }
+  }
+  return out.filter(x=>x.items.length).slice(0,4);
+}
+function gearSectionText(art){ return gearSections(art).map(s=>s.items.map(i=>i.s).join('\n')).join('\n') }
+const gearCache = {};
+async function gearFor(p, bandName){ // p: {id, name, wiki_en, wiki_ru} или MA-участник
+  const key = p.id || ('ma'+p.ma_artist);
+  if (gearCache[key]) return gearCache[key];
+  gearCache[key] = (async ()=>{
+    let url = p.wiki_en || p.wiki_ru;
+    if (!url && bandName) url = await W.findPerson(p.name, bandName);
+    if (!url) return {by:{}, sections:[], url:null};
+    let art = null;
+    try { art = await W.article(p.wiki_en || url) } catch(e){ return {by:{}, sections:[], url, error:true} }
+    if (!art || !art.text) return {by:{}, sections:[], url};
+    let sections = gearSections(art);
+    // Главный текст — вся статья; разделы об оборудовании учитываются дважды (вес выше)
+    let by = GEAR.extract(art.text + '\n' + gearSectionText(art));
+    if (p.wiki_ru && p.wiki_en){
+      try { const ru = await W.article(p.wiki_ru); by = GEAR.merge(by, GEAR.extract(ru.text)); if (!sections.length) sections = gearSections(ru) } catch(e){}
+    }
+    return {by, sections, url: art.url, lang: art.lang};
+  })();
+  return gearCache[key];
+}
+function gearCount(by){ return Object.values(by||{}).reduce((a,x)=>a+x.length,0) }
+function gearGrid(by){
+  const cats = GEAR.ORDER.filter(c=>by[c] && by[c].length);
+  if (!cats.length) return '';
+  return `<div class="ggrid">${cats.map(c=>`<div class="gcat"><h6>${GEAR.CATS[c].icon} ${GEAR.CATS[c].ru}</h6>${by[c].slice(0,18).map(e=>`<span class="it ${e.n>1?'top':''}" title="${esc(e.ctx)}">${esc(e.name)}${e.n>1?` <small>×${e.n}</small>`:''}</span>`).join('')}</div>`).join('')}</div>`;
+}
+function sectionsHTML(secs){
+  return secs.map(sec=>{
+    let h = `<h5>${esc(sec.name)}</h5>`, inList=false;
+    for (const it of sec.items.slice(0,160)){
+      if (it.t==='li'){ if(!inList){ h+='<ul>'; inList=true } h+=`<li>${esc(it.s)}</li>` }
+      else { if(inList){ h+='</ul>'; inList=false } h+= it.t==='h' ? `<h5>${esc(it.s)}</h5>` : `<p>${esc(it.s)}</p>` }
+    }
+    return h + (inList?'</ul>':'');
+  }).join('');
+}
+function gearBlock(g, instruments){
+  const n = gearCount(g.by);
+  let h = '';
+  if (n) h += gearGrid(g.by);
+  else h += `<p style="color:var(--mut);margin:4px 0">Конкретные модели в статье не найдены.${instruments&&instruments.length?' Инструменты: '+instruments.map(esc).join(', ')+'.':''}</p>`;
+  if (g.sections && g.sections.length) h += `<details class="raw"><summary>Текст разделов об оборудовании из Википедии (${g.sections.map(s=>esc(s.name)).join(', ')})</summary><div style="margin-top:8px">${sectionsHTML(g.sections)}</div></details>`;
+  if (g.url) h += `<div class="src" style="margin-top:6px">Источник: <a target="_blank" href="${esc(g.url)}">Wikipedia (${esc(g.lang||'en')})</a>. Наведите на модель — увидите фразу из статьи.</div>`;
+  return h;
+}
+
+/* ---- карточка группы ---- */
+function memCard(m){
+  return `<div class="mem" data-pid="${m.id}">${avatar(m)}<div style="min-width:0"><b>${esc(m.name)}</b>
+    <small>${[memYears(m)?'в группе: '+memYears(m):'', life(m)?'('+life(m)+')':''].filter(Boolean).join(' ')}</small>
+    <div class="ins">${m.instruments.slice(0,4).map(i=>`<span>${esc(i)}</span>`).join('')}</div></div></div>`;
+}
+function maMemCard(m, i){
+  return `<div class="mem" data-mai="${i}">${avatar({name:m.name, thumb:m.thumb})}<div style="min-width:0"><b>${esc(m.name)}</b>
+    <small>${m.years?'в группе: '+esc(m.years):''}</small>
+    <div class="ins">${m.roles_ru.slice(0,4).map(r=>`<span>${esc(r)}</span>`).join('')}</div>
+    <div class="role">${esc(m.role)}</div></div></div>`;
+}
+function insSummary(ms){
+  const c = {}; ms.forEach(m=>(m.instruments||m.roles_ru||[]).forEach(i=>c[i]=(c[i]||0)+1));
+  const a = Object.entries(c).sort((x,y)=>y[1]-x[1]);
+  return a.length ? a.map(([i,n])=>`<span class="chip" data-ins="${esc(i)}">${esc(i)} <x>${n}</x></span>`).join('') : '<span style="color:var(--mut)">нет данных об инструментах</span>';
+}
+function timeline(b, ms0){
+  const ms = (ms0||b.members).filter(m=>m.start);
+  if (ms.length < 2) return '';
+  const lo = Math.min(b.formed||9999, ...ms.map(m=>m.start)), hi = Math.max(b.dissolved||NOW, ...ms.map(m=>m.end||(b.dissolved||NOW)));
+  const span = Math.max(1, hi-lo), pct = y => ((y-lo)/span*100);
+  const ticks = []; for (let y=Math.ceil(lo/5)*5; y<=hi; y+= span>40?10:5) ticks.push(y);
+  ms.sort((a,b)=>a.start-b.start);
+  return `<div class="sect">Хронология состава</div><div class="tl"><div class="ax"><span>${lo}</span>${ticks.slice(1,-1).map(t=>`<span>${t}</span>`).join('')}<span>${hi}</span></div>
+    ${ms.map(m=>{ const e=m.end||(b.dissolved||NOW); return `<div class="r"><div class="n" title="${esc(m.name)}">${esc(m.name)}</div><div class="tr"><div class="bar" style="left:${pct(m.start)}%;width:${Math.max(1.2,pct(e)-pct(m.start))}%" title="${m.start}–${m.end||'н.в.'}"></div></div></div>` }).join('')}</div>`;
+}
+
+let CUR = null; // текущая открытая группа
+async function openBand(id){
+  HIST.push(['b',id]);
+  showModal('<div class="more" style="padding:120px"><div class="spin"></div></div>');
+  const b = await api('/api/band/'+id);
+  if (b.error){ showModal('<div class="empty">Не найдено</div>'); return }
+  CUR = b; b.ma = null;
+  const solo = b.kind === 'solo';
+  const cur = b.members.filter(m=>!m.end), past = b.members.filter(m=>m.end);
+  const big = b.thumb ? b.thumb.replace(/width=\d+/, 'width=1200') : '';
+  const maPromise = b.ma_id ? api('/api/ma/'+b.ma_id).catch(()=>null) : Promise.resolve(null);
+  showModal(`
+  <div class="hero">${big?`<img class="bgimg" id="bbg" src="${esc(big)}" onerror="this.remove()">`:`<img class="bgimg" id="bbg" style="display:none">`}
+    <div class="hc">
+      ${b.thumb?`<img class="pic ${solo?'round':''}" id="bpic" src="${esc(b.thumb)}" onerror="this.remove()">`:`<img class="pic ${solo?'round':''}" id="bpic" style="display:none" onerror="imgFallback(this)">`}
+      <div><h1>${esc(b.name)}</h1>
+        <div class="sub">${[b.name_ru&&b.name_ru!==b.name?b.name_ru:'', solo?'сольный исполнитель':'', solo&&b.born?'род. '+b.born:'', b.formed?'на сцене: '+years(b):'', b.country, b.origin].filter(Boolean).map(esc).join(' · ')}</div>
+        <span id="blogo">${b.logo_thumb&&b.source!=='metal-archives'?`<img class="lg" src="${esc(b.logo_thumb)}" onerror="this.remove()">`:''}</span>
+      </div>
+    </div>
+  </div>
+  <div class="mb">
+    <div class="tabs" id="btabs">
+      <button data-t="about" class="on">Обзор</button>
+      <button data-t="lineup" id="tlineup">${solo?'Исполнитель':'Состав'} (${b.members.length||'…'})</button>
+      <button data-t="gear">Оборудование</button>
+      <button data-t="photos">Фото</button>
+    </div>
+    <div data-p="about">
+      <div class="cols">
+        <div>
+          <div class="desc" id="bdesc"><div class="spin"></div></div>
+          ${b.members.length && !solo?`<div class="sect">Состав коротко</div><div class="members">${b.members.slice(0,6).map(memCard).join('')}</div>`:''}
+          <div id="mashort"></div>
+        </div>
+        <div class="facts"><dl>
+          <dt>${solo?'Карьера с':'Основана'}</dt><dd>${b.formed||'—'}</dd>
+          <dt>Статус</dt><dd>${isSplit(b)?(b.dissolved?(solo?'завершил(а) карьеру в ':'распалась в ')+b.dissolved:esc(STATUS_RU[b.status_text]||'распалась')):'<span style="color:var(--ok)">'+esc(STATUS_RU[b.status_text]||'активна')+'</span>'}</dd>
+          ${b.formed?`<dt>На сцене</dt><dd>${(b.dissolved||NOW)-b.formed} лет</dd>`:''}
+          <dt>Страна</dt><dd>${b.country?`<a href="#" data-country="${esc(b.country)}">${esc(b.country)}</a>`:'—'}</dd>
+          ${b.origin?`<dt>Откуда</dt><dd>${esc(b.origin)}</dd>`:''}
+          <dt>Жанры</dt><dd><div class="chips">${b.genres.map(g=>`<span class="chip" data-genre="${g.id}">${esc(g.name)}</span>`).join('')}</div>${b.ma_genre?`<div class="src" style="margin-top:4px">Metal Archives: ${esc(b.ma_genre)}</div>`:''}</dd>
+          ${b.labels.length?`<dt>Лейблы</dt><dd>${b.labels.map(esc).join(', ')}</dd>`:''}
+          ${solo?'':`<dt>Участников</dt><dd id="fmem">${b.members.length||'нет данных'}</dd>`}
+          ${b.website?`<dt>Сайт</dt><dd><a target="_blank" href="${esc(b.website)}">${esc(b.website.replace(/^https?:\/\/(www\.)?/,'').replace(/\/$/,''))}</a></dd>`:''}
+          <dt>Ссылки</dt><dd>${[b.wiki_ru?`<a target="_blank" href="${esc(b.wiki_ru)}">Википедия RU</a>`:'', b.wiki_en?`<a target="_blank" href="${esc(b.wiki_en)}">Wikipedia EN</a>`:'',
+            /^Q/.test(b.id)?`<a target="_blank" href="https://www.wikidata.org/wiki/${b.id}">Wikidata</a>`:'', b.mbid?`<a target="_blank" href="https://musicbrainz.org/artist/${b.mbid}">MusicBrainz</a>`:'',
+            b.ma_id?`<a target="_blank" href="https://www.metal-archives.com/bands/_/${b.ma_id}">Metal Archives</a>`:''].filter(Boolean).join(' · ')}</dd>
+        </dl><dl id="mafacts" style="margin-top:10px"></dl></div>
+      </div>
+    </div>
+    <div data-p="lineup" hidden>
+      ${b.members.length? `
+        ${solo?'':''}
+        ${cur.length?`<div class="sect">${solo?'Исполнитель':(isSplit(b)?'Последний / основной состав':'Текущий / основной состав')}</div><div class="members">${cur.map(memCard).join('')}</div>`:''}
+        ${past.length?`<div class="sect">Бывшие участники</div><div class="members">${past.map(memCard).join('')}</div>`:''}
+        ${timeline(b)}
+        <div class="sect">Инструменты</div><div class="inslist">${insSummary(b.members)}</div>
+      ` : ''}
+      <div id="malineup">${b.ma_id?'<div class="spin"></div>':''}</div>
+      ${!b.members.length && !b.ma_id ? '<div class="empty">Состав пока не внесён в базы данных. Смотрите описание во вкладке «Обзор».</div>' : ''}
+    </div>
+    <div data-p="gear" hidden><div class="gear" id="bgear"></div></div>
+    <div data-p="photos" hidden><div id="bphotos"></div></div>
+  </div>`);
+  $('#btabs').onclick = e=>{ const t=e.target.closest('button'); if(!t) return;
+    $$('#btabs button').forEach(x=>x.classList.toggle('on',x===t));
+    $$('[data-p]').forEach(p=>p.hidden = p.dataset.p!==t.dataset.t);
+    if (t.dataset.t==='gear') loadBandGear(b);
+    if (t.dataset.t==='photos') loadPhotos(b);
+  };
+  bindModalLinks();
+  const missM = b.members.filter(m=>!m.thumb && (m.wiki_en||m.wiki_ru)).map(m=>[m.id, m.wiki_en||m.wiki_ru]);
+  if (missM.length) W.images(missM, 300).then(mp=>{ b.members.forEach(m=>{ if(mp[m.id]){ m.thumb = mp[m.id];
+    $$(`#modal .mem[data-pid="${m.id}"] .av`).forEach(av=>av.innerHTML=`<img src="${esc(mp[m.id])}">`) } }) });
+
+  // описание из Википедии
+  const wikiP = (async ()=>{
+    let w = null;
+    try {
+      if (b.wiki_ru) w = await W.intro(b.wiki_ru);
+      if ((!w || !w.extract) && b.wiki_en) w = await W.intro(b.wiki_en);
+      if (w && !w.image && b.wiki_en && w.lang!=='en'){ const e = await W.intro(b.wiki_en); w.image = e.image; w.image_full = e.image_full }
+    } catch(e){ if (/^Q/.test(id)) w = await api(`/api/band/${id}/wiki`) }
+    return w;
+  })();
+  const [w, ma] = await Promise.all([wikiP, maPromise]);
+  if (CUR !== b) return;
+  b.ma = ma && !ma.error ? ma : null;
+  const el = $('#bdesc'); if (!el) return;
+  if (w && w.extract){
+    el.innerHTML = w.extract.split('\n').filter(Boolean).map(p=>`<p>${esc(p)}</p>`).join('') + `<div class="src">Источник: <a href="${esc(w.url)}" target="_blank">Википедия (${w.lang})</a>, CC BY-SA</div>`;
+    if (w.image){ const pic=$('#bpic'); if(pic && pic.style.display==='none'){ pic.src=w.image; pic.style.display='' } b._wimg = w.image_full||w.image }
+  } else if (b.ma && b.ma.bio){
+    el.innerHTML = b.ma.bio.replace(/\r/g,'').split(/\n+/).filter(x=>x.trim() && !/^Contact:/i.test(x)).map(p=>`<p>${esc(p)}</p>`).join('') + `<div class="src">Источник: <a href="${esc(b.ma.url)}" target="_blank">Encyclopaedia Metallum</a> (англ.)</div>`;
+  } else el.innerHTML = `<p style="color:var(--mut)">${esc(b.desc_ru||b.desc_en||'Подробного описания пока нет.')}</p>`;
+  if (b.ma) renderMA(b);
+  else if (b.ma_id) { const ml=$('#malineup'); if (ml) ml.innerHTML = '<p class="src">Не удалось загрузить данные Metal Archives (сайт временно недоступен).</p>' }
+}
+function renderMA(b){
+  const ma = b.ma, st = ma.stats||{};
+  const pic = $('#bpic');
+  if (pic && pic.style.display==='none' && ma.photo){ pic.src = ma.photo; pic.style.display='' }
+  if (ma.photo && $('#bbg') && $('#bbg').style.display==='none'){ $('#bbg').src = ma.photo; $('#bbg').style.display='' }
+  if (ma.logo && !$('#blogo img')) $('#blogo').innerHTML = `<img class="lg" src="${esc(ma.logo)}" onerror="imgFallback(this)">`;
+  const RU = {'Location':'Город (MA)','Status':'Статус (MA)','Formed in':'Основана (MA)','Years active':'Годы активности','Themes':'Темы текстов','Current label':'Лейбл','Last label':'Последний лейбл','Genre':'Жанр (MA)'};
+  $('#mafacts').innerHTML = Object.entries(RU).filter(([k])=>st[k]&&st[k]!=='N/A').map(([k,ru])=>`<dt>${ru}</dt><dd>${esc(st[k])}</dd>`).join('');
+  const L = ma.lineup||{}; const all = [];
+  let h = '';
+  for (const k of ['current','all','past','live']) if (L[k]){
+    h += `<div class="sect">${esc(L[k].title)} <span style="text-transform:none;letter-spacing:0;color:var(--mut)">— Metal Archives</span></div><div class="members">${L[k].members.map(m=>{ all.push(m); return maMemCard(m, all.length-1) }).join('')}</div>`;
+  }
+  b._maMembers = all;
+  if (all.length){
+    if (!b.members.length) h += timeline(b, all.filter((m,i,a)=>a.findIndex(x=>x.ma_artist===m.ma_artist)===i)) + `<div class="sect">Инструменты</div><div class="inslist">${insSummary(all)}</div>`;
+    $('#malineup').innerHTML = (b.members.length?'<div class="sect" style="margin-top:30px;color:var(--acc)">Подробный состав по данным Metal Archives</div>':'') + h;
+    if (!b.members.length){
+      $('#tlineup').textContent = `Состав (${new Set(all.map(m=>m.ma_artist)).size})`;
+      if ($('#fmem')) $('#fmem').textContent = new Set(all.map(m=>m.ma_artist)).size;
+      $('#mashort').innerHTML = `<div class="sect">Состав коротко</div><div class="members">${all.slice(0,6).map((m,i)=>maMemCard(m,i)).join('')}</div>`;
+    }
+    $$('#modal [data-mai]').forEach(c=>c.onclick=()=>openMAMember(b._maMembers[+c.dataset.mai], b.name));
+  } else $('#malineup').innerHTML = '';
+}
+function bindModalLinks(){
+  $$('#modal [data-genre]').forEach(c=>c.onclick=()=>{ ST.genre=c.dataset.genre; closeModal(); switchView('catalog'); apply() });
+  $$('#modal [data-country]').forEach(c=>c.onclick=(e)=>{ e.preventDefault(); ST.country=c.dataset.country; closeModal(); switchView('catalog'); apply() });
+  $$('#modal [data-pid]').forEach(c=>c.onclick=(e)=>{ e.preventDefault(); openPerson(c.dataset.pid) });
+  $$('#modal [data-bid]').forEach(c=>c.onclick=()=>openBand(c.dataset.bid));
+  $$('#modal [data-ins]').forEach(c=>c.onclick=()=>{ ST.instrument=c.dataset.ins; closeModal(); switchView('catalog'); apply() });
+}
+
+/* ---- вкладка «Оборудование» группы ---- */
+async function loadBandGear(b){
+  const el = $('#bgear'); if (!el || el.dataset.loaded) return; el.dataset.loaded = 1;
+  // участники: из Wikidata, иначе — из Metal Archives (ищем их статьи в Википедии)
+  let ms = b.members.map(m=>({...m, _kind:'wd'}));
+  if (!ms.length && b._maMembers) {
+    const seen = new Set();
+    ms = b._maMembers.filter(m=>!seen.has(m.ma_artist) && seen.add(m.ma_artist)).map(m=>({...m, instruments:m.roles_ru, _kind:'ma'}));
+  }
+  if (!ms.length){ el.innerHTML = '<div class="empty">Нет данных о составе — оборудование определить не из чего.</div>'; return }
+  el.innerHTML = `<p class="src" id="gprog">Анализирую статьи Википедии об участниках: гитары, басы, усилители, кабинеты, педали эффектов, ударные, тарелки, клавишные… <b>0/${ms.length}</b></p>
+    <div id="gsum"></div><div id="glist"></div>`;
+  const res = {}; let n = 0;
+  const queue = ms.map((m,i)=>[m,i]);
+  const drawList = ()=>{
+    const gl = $('#glist'); if(!gl) return;
+    gl.innerHTML = ms.map((m,i)=>{ const g = res[i]; if (!g || (!gearCount(g.by) && !g.sections.length)) return '';
+      return `<div class="who">${m.thumb?`<img src="${esc(m.thumb)}">`:''}<div><h4>${m._kind==='wd'?`<a href="#" data-pid="${m.id}">${esc(m.name)}</a>`:`<a href="#" data-mai2="${i}">${esc(m.name)}</a>`}</h4>
+        <small style="color:var(--mut)">${(m.instruments||[]).map(esc).join(', ')}${m.years||memYears(m)?' · '+esc(m.years||memYears(m)):''}</small></div></div>
+        <div class="box">${gearBlock(g, m.instruments)}</div>` }).join('');
+    $$('#glist [data-pid]').forEach(c=>c.onclick=(e)=>{ e.preventDefault(); openPerson(c.dataset.pid) });
+    $$('#glist [data-mai2]').forEach(c=>c.onclick=(e)=>{ e.preventDefault(); openMAMember(ms[+c.dataset.mai2], b.name) });
+  };
+  const drawSum = ()=>{
+    const lists = Object.entries(res).map(([i,g])=>{ const o = {}; for (const [c,arr] of Object.entries(g.by)) o[c] = arr.map(e=>({...e, who: ms[i].name.split(' ').slice(-1)[0]})); return o });
+    const by = GEAR.merge(...lists);
+    const cats = GEAR.ORDER.filter(c=>by[c] && by[c].length);
+    $('#gsum').innerHTML = cats.length ? `<div class="sect">Сводка оборудования ${b.kind==='solo'?'исполнителя':'группы'}</div><div class="box" style="padding:6px 8px;background:var(--bg3);border:1px solid var(--line);border-radius:12px"><table class="gsum" style="width:100%;border-collapse:collapse">${cats.map(c=>`<tr><td>${GEAR.CATS[c].icon} ${GEAR.CATS[c].ru}</td><td>${by[c].slice(0,24).map(e=>`<span class="it" title="${esc(e.ctx)}">${esc(e.name)} <i>· ${esc(e.who||'')}</i></span>`).join('')}</td></tr>`).join('')}</table></div><div class="sect">По участникам</div>` : '';
+  };
+  const worker = async ()=>{ while(queue.length){ const [m,i] = queue.shift();
+    try { res[i] = await gearFor(m, m._kind==='ma' ? b.name : null) } catch(e){}
+    n++; const p=$('#gprog b'); if(p) p.textContent = `${n}/${ms.length}`;
+    drawSum(); drawList();
+  }};
+  await Promise.all([worker(),worker(),worker()]);
+  const found = Object.values(res).filter(g=>gearCount(g.by)).length;
+  const p = $('#gprog'); if (p) p.innerHTML = `Оборудование извлечено из статей Википедии: модели найдены у <b>${found}</b> из ${ms.length} участников. Категории: гитары, басы, усилители, кабинеты, педали и эффекты, звукосниматели, ударные, тарелки, клавишные, струны/палочки.`;
+  if (!found && !$('#glist').innerHTML.trim()) $('#glist').innerHTML = '<div class="empty">В Википедии нет сведений об оборудовании участников этой группы.</div>';
+}
+function loadPhotos(b){
+  const el = $('#bphotos'); if(!el || el.dataset.loaded) return; el.dataset.loaded=1;
+  const ph = [];
+  if (b.image) ph.push([b.image.replace('http://','https://')+'?width=1000', b.name + ' (Wikimedia Commons)']);
+  else if (b._wimg) ph.push([b._wimg, b.name + ' (Википедия)']);
+  if (b.ma && b.ma.photo) ph.push([b.ma.photo, b.name + ' (Metal Archives)']);
+  if (b.logo) ph.push([b.logo.replace('http://','https://')+'?width=600', 'Логотип']);
+  if (b.ma && b.ma.logo) ph.push([b.ma.logo, 'Логотип (Metal Archives)']);
+  b.members.forEach(m=>{ if(m.image) ph.push([m.image.replace('http://','https://')+'?width=600', m.name]); else if (m.thumb) ph.push([m.thumb, m.name]) });
+  el.innerHTML = ph.length ? `<div style="columns:3 260px;gap:12px">${ph.map(([u,c])=>`<figure style="margin:0 0 12px;break-inside:avoid;background:var(--bg3);border-radius:10px;overflow:hidden;border:1px solid var(--line)"><a href="${esc(u.replace(/\?width=\d+/,''))}" target="_blank"><img loading="lazy" src="${esc(u)}" style="width:100%;display:block;background:#f4f2ee" onerror="if(/metal-archives/.test(this.src)&&!this.dataset.fb){this.dataset.fb=1;this.src='/api/img?u='+encodeURIComponent(this.src.split('?')[0])}else this.closest('figure').remove()"></a><figcaption style="padding:6px 10px;font-size:12px;color:var(--mut)">${esc(c)}</figcaption></figure>`).join('')}</div><p class="src">Фото: Wikimedia Commons / Wikipedia / Encyclopaedia Metallum. Нажмите на снимок, чтобы открыть оригинал.</p>`
+    : '<div class="empty">Фотографий нет</div>';
+}
+
+/* ---- карточка музыканта (Wikidata) ---- */
+async function openPerson(id){
+  HIST.push(['p',id]);
+  showModal('<div class="more" style="padding:120px"><div class="spin"></div></div>');
+  const p = await api('/api/person/'+id);
+  showModal(`
+  <div class="hero" style="min-height:220px"><div class="hc">
+    ${p.thumb?`<img class="pic round" src="${esc(p.thumb)}" onerror="this.remove()">`:`<div class="pic round" style="display:flex;align-items:center;justify-content:center;font-size:54px;font-weight:900;color:#fff3;background:hsl(${hue(p.name)},30%,20%)">${esc(initials(p.name))}</div>`}
+    <div><h1>${esc(p.name)}</h1><div class="sub">${[p.name_en&&p.name_en!==p.name?p.name_en:'', life(p)].filter(Boolean).map(esc).join(' · ')}</div>
+    <div class="chips" style="margin-top:10px">${p.instruments.map(i=>`<span class="chip" data-ins="${esc(i)}">${esc(i)}</span>`).join('')}</div></div>
+  </div></div>
+  <div class="mb">
+    <div class="cols"><div>
+      <div class="desc" id="pdesc"><div class="spin"></div></div>
+      <div class="sect">Оборудование: гитары, усилители, педали…</div>
+      <div class="gear" id="pgear"><div class="spin"></div></div>
+    </div>
+    <div class="facts">
+      <div class="sect" style="margin-top:0">${p.bands.length===1&&p.bands[0].id===p.id?'Проект':'Группы'} (${p.bands.length})</div>
+      ${p.bands.map(b=>`<div class="mem" data-bid="${b.id}" style="margin-bottom:8px">${b.thumb||b.logo_thumb?`<div class="av" style="border-radius:8px"><img src="${esc(b.thumb||b.logo_thumb)}" onerror="this.remove()"></div>`:`<div class="av" style="border-radius:8px">${esc(initials(b.name))}</div>`}<div><b>${esc(b.name)}</b><small>${years(b)}${memYears(b)?' · в составе '+memYears(b):''}</small></div></div>`).join('')}
+      <div class="sect">Ссылки</div>
+      ${[p.wiki_ru?`<a target="_blank" href="${esc(p.wiki_ru)}">Википедия RU</a>`:'', p.wiki_en?`<a target="_blank" href="${esc(p.wiki_en)}">Wikipedia EN</a>`:'', `<a target="_blank" href="https://www.wikidata.org/wiki/${p.id}">Wikidata</a>`, `<a target="_blank" href="https://equipboard.com/search?q=${encodeURIComponent(p.name_en||p.name)}">Equipboard</a>`].filter(Boolean).join(' · ')}
+    </div></div>
+  </div>`);
+  bindModalLinks();
+  W.images(p.bands.filter(b=>!b.thumb&&(b.wiki_en||b.wiki_ru)).map(b=>[b.id,b.wiki_en||b.wiki_ru]),200).then(mp=>{
+    for (const [bid,u] of Object.entries(mp)) $$(`#modal .mem[data-bid="${bid}"] .av`).forEach(av=>av.innerHTML=`<img src="${esc(u)}">`) });
+  if (p.wiki_en||p.wiki_ru){
+    (async ()=>{ try { let w = p.wiki_ru ? await W.intro(p.wiki_ru) : null; if ((!w||!w.extract) && p.wiki_en) w = await W.intro(p.wiki_en);
+        if (w && !w.image && p.wiki_en && w.lang!=='en'){ const e = await W.intro(p.wiki_en); w.image = e.image } return w } catch(e){ return api(`/api/person/${id}/wiki`) } })()
+    .then(w=>{ const el=$('#pdesc'); if(!el) return;
+      if (!p.thumb && w && w.image){ const ph = $('#modal .pic.round'); if (ph) ph.outerHTML = `<img class="pic round" src="${esc(w.image)}">` }
+      el.innerHTML = w&&w.extract ? w.extract.split('\n').filter(Boolean).map(x=>`<p>${esc(x)}</p>`).join('')+`<div class="src">Источник: <a target="_blank" href="${esc(w.url)}">Википедия (${w.lang})</a></div>` : '' });
+    gearFor(p).then(g=>{ const el=$('#pgear'); if(el) el.innerHTML = `<div class="box">${gearBlock(g, p.instruments)}</div>` });
+  } else { $('#pdesc').innerHTML=''; $('#pgear').innerHTML = `<div class="empty" style="padding:10px;text-align:left">Нет статьи в Википедии. ${p.instruments.length?'Инструменты: '+p.instruments.map(esc).join(', ')+'.':''}</div>` }
+}
+
+/* ---- музыкант из Metal Archives ---- */
+async function openMAMember(m, bandName){
+  HIST.push(['m', m, bandName]);
+  showModal(`
+  <div class="hero" style="min-height:200px"><div class="hc">
+    <div class="pic round" id="mpic" style="display:flex;align-items:center;justify-content:center;font-size:54px;font-weight:900;color:#fff3;background:hsl(${hue(m.name)},30%,20%)">${esc(initials(m.name))}</div>
+    <div><h1>${esc(m.name)}</h1><div class="sub">${esc(bandName)} · ${esc(m.role)}${m.years?' · '+esc(m.years):''}</div>
+    <div class="chips" style="margin-top:10px">${(m.roles_ru||[]).map(i=>`<span class="chip" data-ins="${esc(i)}">${esc(i)}</span>`).join('')}</div></div>
+  </div></div>
+  <div class="mb"><div class="cols"><div>
+      <div class="desc" id="pdesc"><div class="spin"></div></div>
+      <div class="sect">Оборудование: гитары, усилители, педали…</div>
+      <div class="gear" id="pgear"><div class="spin"></div></div>
+    </div>
+    <div class="facts"><dl>
+      <dt>Группа</dt><dd>${esc(bandName)}</dd><dt>Роль</dt><dd>${esc(m.role)}</dd>${m.years?`<dt>Годы</dt><dd>${esc(m.years)}</dd>`:''}
+      ${m.see_also?`<dt>Другие проекты</dt><dd>${esc(m.see_also)}</dd>`:''}
+      <dt>Ссылки</dt><dd><a target="_blank" href="${esc(m.url)}">Metal Archives</a> · <a target="_blank" href="https://equipboard.com/search?q=${encodeURIComponent(m.name)}">Equipboard</a></dd>
+    </dl></div></div></div>`);
+  bindModalLinks();
+  const url = await W.findPerson(m.name, bandName);
+  if (!url){ $('#pdesc').innerHTML = '<p style="color:var(--mut)">Статьи в Википедии об этом музыканте не найдено.</p>'; $('#pgear').innerHTML = '<div class="empty" style="padding:10px;text-align:left">Нет данных об оборудовании.</div>'; return }
+  try { const w = await W.intro(url); if (w){ $('#pdesc').innerHTML = w.extract.split('\n').filter(Boolean).map(x=>`<p>${esc(x)}</p>`).join('')+`<div class="src">Источник: <a target="_blank" href="${esc(url)}">Wikipedia (en)</a></div>`;
+    if (w.image) $('#mpic').outerHTML = `<img class="pic round" src="${esc(w.image)}">` } } catch(e){}
+  const g = await gearFor({...m, wiki_en:url}); const el=$('#pgear'); if (el) el.innerHTML = `<div class="box">${gearBlock(g, m.roles_ru)}</div>`;
+}
+
+/* ---------- views ---------- */
+function switchView(v){
+  $$('nav button').forEach(b=>b.classList.toggle('on', b.dataset.v===v));
+  $$('main > section').forEach(s=>s.hidden = s.id !== 'v-'+v);
+  $('#side').style.display = v==='catalog' ? '' : 'none';
+  document.querySelector('.wrap').style.gridTemplateColumns = v==='catalog' ? '' : '1fr';
+  if (v==='timeline') drawTimeline();
+  if (v==='genres') drawGenres();
+  if (v==='stats') drawStats();
+  window.scrollTo(0,0);
+}
+$$('nav button').forEach(b=> b.onclick = ()=>switchView(b.dataset.v));
+const tip = $('#tip');
+function tipOn(e, t){ tip.style.display='block'; tip.innerHTML=t; tip.style.left=(e.clientX+12)+'px'; tip.style.top=(e.clientY-30)+'px' }
+function tipOff(){ tip.style.display='none' }
+
+async function getStats(){ if(!STATS) STATS = await api('/api/stats'); return STATS }
+async function drawTimeline(){
+  const el = $('#v-timeline'); if (el.dataset.ok) return; el.innerHTML='<div class="spin"></div>';
+  const s = await getStats(); el.dataset.ok=1;
+  const ys = s.years, max = Math.max(...ys.map(y=>y[1]));
+  const dec = {}; ys.forEach(([y,n])=>{ const d=Math.floor(y/10)*10; dec[d]=(dec[d]||0)+n });
+  el.innerHTML = `
+  <div class="panel"><h3>Год основания групп — ${ys.reduce((a,y)=>a+y[1],0).toLocaleString('ru')} групп с известной датой</h3>
+    <div class="hist" id="hist">${ys.map(([y,n])=>`<div data-y="${y}" data-n="${n}" style="height:${n/max*100}%"></div>`).join('')}</div>
+    <div class="hax"><span>${ys[0][0]}</span><span>1960</span><span>1970</span><span>1980</span><span>1990</span><span>2000</span><span>2010</span><span>${ys.at(-1)[0]}</span></div>
+    <p class="src">Нажмите на столбик, чтобы открыть все группы, основанные в этом году.</p></div>
+  <div class="panel"><h3>По десятилетиям</h3><div class="decgrid">${Object.entries(dec).map(([d,n])=>`<div class="dec" data-d="${d}"><b>${d}-е</b><small>${n.toLocaleString('ru')} групп</small></div>`).join('')}</div></div>
+  <div class="panel"><h3>Первопроходцы — старейшие группы</h3><div class="grid" id="oldest"></div></div>`;
+  $$('#hist div').forEach(d=>{ d.onmousemove=e=>tipOn(e, `<b>${d.dataset.y}</b>: ${(+d.dataset.n).toLocaleString('ru')} групп`); d.onmouseleave=tipOff;
+    d.onclick=()=>{ tipOff(); ST.from=ST.to=d.dataset.y; switchView('catalog'); apply() } });
+  $$('.dec').forEach(d=>d.onclick=()=>{ ST.from=+d.dataset.d; ST.to=+d.dataset.d+9; switchView('catalog'); apply() });
+  const o = await api('/api/bands?sort=formed&size=12&from=1900&lineup=1');
+  $('#oldest').innerHTML = o.items.map(b=>`<div class="card" data-id="${b.id}">${phHTML(b)}<div class="cb"><h3>${esc(b.name)}</h3><div class="meta">${esc(b.country||'')}</div><div class="g">${(b.genres||[]).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div></div>`).join('');
+  fillCardThumbs(o.items, $('#oldest'));
+  $('#oldest').onclick = e=>{ const c=e.target.closest('[data-id]'); if(c) openBand(c.dataset.id) };
+}
+async function drawGenres(){
+  const el = $('#v-genres'); if (el.dataset.ok) return;
+  if (!FACETS) FACETS = await api('/api/facets'); el.dataset.ok=1;
+  const g = FACETS.genres, max = Math.log(g[0].n+1);
+  el.innerHTML = `<div class="panel"><h3>Все направления гитарной музыки — ${g.length} жанров</h3>
+    <input class="in" id="gfind" placeholder="Найти жанр: блэк, гранж, шугейз, джент…" style="max-width:400px;margin-bottom:14px">
+    <div class="gcloud" id="gcl">${g.map(x=>`<span data-g="${x.id}" data-name="${esc(x.name.toLowerCase())}" style="font-size:${11+Math.log(x.n+1)/max*13}px">${esc(x.name)}<small>${x.n}</small></span>`).join('')}</div></div>`;
+  $('#gfind').oninput = e=>{ const t=e.target.value.toLowerCase(); $$('#gcl span').forEach(s=>s.style.display = s.dataset.name.includes(t)?'':'none') };
+  $('#gcl').onclick = e=>{ const s=e.target.closest('[data-g]'); if(s){ ST.genre=s.dataset.g; switchView('catalog'); apply() } };
+}
+async function drawStats(){
+  const el = $('#v-stats'); if (el.dataset.ok) return; el.innerHTML='<div class="spin"></div>';
+  const s = await getStats(); el.dataset.ok=1;
+  const bars = (arr, key) => { const m = Math.max(...arr.map(a=>a[1])); return `<div class="bars">${arr.map(([l,n,id])=>`<div class="b" data-k="${key}" data-v="${esc(id||l)}"><span class="l">${esc(l)}</span><span class="t"><i style="width:${n/m*100}%"></i></span><span class="v">${n.toLocaleString('ru')}</span></div>`).join('')}</div>` };
+  el.innerHTML = `
+  <div class="panel"><div class="decgrid">
+    <div class="dec"><b>${(s.groups||s.bands).toLocaleString('ru')}</b><small>групп</small></div>
+    <div class="dec"><b>${(s.solo||0).toLocaleString('ru')}</b><small>сольных исполнителей</small></div>
+    <div class="dec"><b>${(s.ma||0).toLocaleString('ru')}</b><small>из Metal Archives</small></div>
+    <div class="dec"><b>${s.persons.toLocaleString('ru')}</b><small>музыкантов</small></div>
+    <div class="dec"><b>${s.genres}</b><small>жанров</small></div>
+    <div class="dec"><b>${s.countries}</b><small>стран</small></div>
+    <div class="dec"><b>${s.with_photo.toLocaleString('ru')}</b><small>групп с фото в Wikidata</small></div>
+  </div></div>
+  <div class="g2">
+    <div class="panel"><h3>Самые массовые жанры</h3>${bars(s.top_genres.map(g=>[g.name,g.n,g.id]),'genre')}</div>
+    <div class="panel"><h3>Страны</h3>${bars(s.top_countries,'country')}</div>
+    <div class="panel"><h3>Инструменты музыкантов</h3>${bars(s.top_instruments,'instrument')}</div>
+    <div class="panel"><h3>Самые известные группы</h3><div id="topb"></div></div>
+  </div>`;
+  $$('#v-stats .b').forEach(b=>b.onclick=()=>{ ST[b.dataset.k]=b.dataset.v; switchView('catalog'); apply() });
+  const t = await api('/api/bands?sort=popular&size=20');
+  $('#topb').innerHTML = `<div class="bars">${t.items.map((b,i)=>`<div class="b" data-id="${b.id}"><span class="l">${i+1}. ${esc(b.name)}</span><span class="v" style="width:auto">${years(b)}</span></div>`).join('')}</div>`;
+  $('#topb').onclick = e=>{ const c=e.target.closest('[data-id]'); if(c) openBand(c.dataset.id) };
+}
+
+window.addEventListener('hashchange', ()=>{ fromHash(); syncUI(); reload() });
+/* ---------- init ---------- */
+(async function(){
+  fromHash(); syncUI(); reload();
+  FACETS = await api('/api/facets');
+  CG = combo('#cgenre', ()=>FACETS.genres, x=>{ ST.genre = x?x.id:''; apply() });
+  CC = combo('#ccountry', ()=>FACETS.countries, x=>{ ST.country = x?x.name:''; apply() });
+  CI = combo('#cinstr', ()=>FACETS.instruments, x=>{ ST.instrument = x?x.name:''; apply() });
+  $('#cgenre input').placeholder = `Все жанры (${FACETS.genres.length})`;
+  syncUI();
+  getStats().then(s=> $('#hstats').innerHTML = `<b>${(s.groups||s.bands).toLocaleString('ru')}</b> групп · <b>${(s.solo||0).toLocaleString('ru')}</b> сольных · <b>${s.persons.toLocaleString('ru')}</b> музыкантов · <b>${s.genres}</b> жанров`);
+})();
+</script>
+</body>
+</html>
